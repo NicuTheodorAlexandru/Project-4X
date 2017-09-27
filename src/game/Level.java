@@ -77,13 +77,18 @@ public class Level
 		List<Model> models = Renderer.provinces.stream()
 									.map(Tile::getModel)
 									.collect(Collectors.toList());
-		if(Mouse.isLeftButtonPressed() && !HUD.menuOpen)
+		if(Mouse.isLeftButtonReleased() && !HUD.menuOpen && !HUD.buttonClicked)
 		{
 			mouseBoxSelection.selectModel(models, Main.window, Mouse.getMousePosition(), 
 			Main.camera);
 		}
 			
-		if(Mouse.isRightButtonPressed() && selectedTile != null  && !HUD.menuOpen)
+		if(Mouse.isRightButtonReleased() && selectedTile != null  && !HUD.menuOpen && !HUD.buttonClicked)
+		{
+			selectedTile.getModel().setSelected(false);
+			selectedTile = null;
+		}
+		if(selectedTile != null && Keyboard.getKeyReleased(Settings.keyExit))
 		{
 			selectedTile.getModel().setSelected(false);
 			selectedTile = null;

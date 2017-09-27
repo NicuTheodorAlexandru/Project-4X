@@ -70,6 +70,7 @@ public class Main
 		Defines.init();
 		window = new Window(Defines.widthResolution, Defines.heightResolution, Defines.title);
 		GL.createCapabilities();
+		//GL11.glViewport(0, 0, window.getWindowWidth(), window.getWindowHeight());
 		vg = NanoVGGL2.nvgCreate(0);
 		setupFonts();
 		
@@ -97,7 +98,6 @@ public class Main
 	private void update()
 	{
 		Mouse.update();
-		GLFW.glfwPollEvents();
 		//Mouse.update();
 		
 		window.update();

@@ -3,6 +3,7 @@ package gui;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
+import graphics.HUD;
 import graphics.Text;
 import input.Mouse;
 import main.Main;
@@ -27,6 +28,7 @@ public class Button
 				if(this.y >= y && this.y - height <= y)
 				{
 					activated = true;
+					HUD.buttonClicked = true;
 				}
 			}
 		}

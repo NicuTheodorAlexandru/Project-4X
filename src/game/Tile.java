@@ -33,10 +33,15 @@ public class Tile
 		return factories.size();
 	}
 	
+	public void buildWoodcutter()
+	{
+		
+	}
+	
 	public void buildFarm()
 	{
-		if(owner.getMoney() >= 10.0f)
-			owner.changeMoney(-10.0f);
+		if(owner.getStockpile("Wood") >= 1.0f)
+			owner.changeStockpile("Wood", -1.0f);
 		else
 			return;
 		float money = 10.0f;
