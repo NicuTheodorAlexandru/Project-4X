@@ -18,6 +18,11 @@ public class Calendar
 	private String time;
 	private long lastFrame;
 	
+	public boolean getPause()
+	{
+		return pause;
+	}
+	
 	public void unpause()
 	{
 		pause = false;
@@ -139,12 +144,17 @@ public class Calendar
 		this.day = day;
 		this.month = month;
 		this.year = year;
-		time = "";
-		date = new Text(Main.window.getWindowWidth() - 250.0f, 20.0f, time);
 		months = new String[]
 			{
 				"January", "February", "March", "April", "May", "June", "July", "August", "September",
 				"October", "November", "December"
 			};
+		time = "";
+		updateDate();
+		this.hour = hour;
+		this.day = day;
+		this.month = month;
+		this.year = year;
+		date = new Text(Main.window.getWindowWidth() - 250.0f, 20.0f, time);
 	}
 }

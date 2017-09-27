@@ -33,30 +33,19 @@ public class Keyboard
 	{
 		glfwSetKeyCallback(window, (window, key, scancode, action, mods) -> 
 		{
-			if(action == GLFW_PRESS)
+			if(action == GLFW_PRESS && key >= 0)
 	    	{
 	    		keyPressed[key] = true;
-	    		//just[key] = true;
 	    		keys[key] = true;
 	    	}
-	    	if(action == GLFW_REPEAT)
+	    	if(action == GLFW_REPEAT && key >= 0)
 	    	{
 	    		keys[key] = true;
-	    		//if(just[key])
-	    		//{
-	    			//just[key] = false;
-	    		//}
-	    		//else
-	    		//{
-	    			keyPressed[key] = false;
-	    		//}
 	    	}
-	    	if(action == GLFW_RELEASE)
+	    	if(action == GLFW_RELEASE && key >= 0)
 	    	{
-	    		keyPressed[key] = false;
 	    		keys[key] = false;
 	    		keyReleased[key] = true;
-	    		//just[key] = true;
 	    	}
 	    });
 	}
@@ -65,15 +54,8 @@ public class Keyboard
 	{
 		for(int i = 0; i < keyReleased.length; i++)
 		{
-			//if(just[i])
-			//{
-				//just[i] = false;
-				//continue;
-			//}
-			//else
-			//{
-				keyReleased[i] = false;
-			//}
+			keyPressed[i] = false;
+			keyReleased[i] = false;
 		}
 	}
 

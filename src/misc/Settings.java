@@ -16,6 +16,12 @@ public class Settings
 	public static int keySlowerSpeed = GLFW.GLFW_KEY_KP_SUBTRACT;
 	public static int keyPauseGame = GLFW.GLFW_KEY_SPACE;
 	//settings
+	//window settings
+	public static boolean borderless = true;
+	public static boolean fullscreen = false;
+	public static boolean windowed = false;
+	//video settings
+	//controls settings
 	public static float mouseSensitivity = 0.2f;
 	public static float cameraSpeed = 0.01f;
 }

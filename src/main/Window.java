@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.opengl.GL11;
 
 import misc.Defines;
+import misc.Settings;
 
 public class Window
 {
@@ -109,17 +110,36 @@ public class Window
 		this.height = height;
 		this.title = title;
 		
+		vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 		GLFW.glfwDefaultWindowHints();
-		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GL11.GL_FALSE);
+		
+		if(Settings.borderless)
+		{
+			GLFW.glfwWindowHint(GLFW.GLFW_DECORATED, GL11.GL_FALSE);
+			GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GL11.GL_FALSE);
+			GLFW.glfwWindowHint(GLFW.GLFW_RED_BITS, vidmode.redBits());
+			GLFW.glfwWindowHint(GLFW.GLFW_GREEN_BITS, vidmode.greenBits());
+			GLFW.glfwWindowHint(GLFW.GLFW_BLUE_BITS, vidmode.blueBits());
+			GLFW.glfwWindowHint(GLFW.GLFW_REFRESH_RATE, vidmode.refreshRate());
+			this.width = vidmode.width();
+			this.height = vidmode.height();
+			windowID = GLFW.glfwCreateWindow(this.width, this.height, title, 0, 0);
+		}
+		else if(Settings.fullscreen)
+		{
+			
+		}
+		else if(Settings.windowed)
+		{
+			
+		}
 		//GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MAJOR, 3);
 		//GLFW.glfwWindowHint(GLFW.GLFW_CONTEXT_VERSION_MINOR, 2);
 		//GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_PROFILE, GLFW.GLFW_OPENGL_CORE_PROFILE);
 		//GLFW.glfwWindowHint(GLFW.GLFW_OPENGL_FORWARD_COMPAT, GL11.GL_TRUE);
 		//GLFW.glfwWindowHint(GLFW.GLFW_FLOATING, GL11.GL_TRUE);
-
-		windowID = GLFW.glfwCreateWindow(width, height, title, 0, 0);
-		vidmode = GLFW.glfwGetVideoMode(GLFW.glfwGetPrimaryMonitor());
 		GLFW.glfwMakeContextCurrent(windowID);
+		GLFW.glfwFocusWindow(windowID);
 		center();
 	}
 }

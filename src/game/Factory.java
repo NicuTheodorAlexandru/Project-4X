@@ -17,6 +17,12 @@ public class Factory
 	private float[] resourceInputAmount;
 	private double money;
 	private boolean closed;
+	private double profit = 0.0d;
+	
+	public double getProfit()
+	{
+		return profit;
+	}
 	
 	private void fireWorkers()
 	{
@@ -64,7 +70,8 @@ public class Factory
 				{
 					tile.changePopulation(new Population(p.getCulture(), p.getReligion(), job,
 							amount));
-					p.change(-amount);
+					tile.changePopulation(new Population(p.getCulture(), p.getReligion(), "Unemployed", 
+							-amount));
 					workers += amount;
 					amount = 0;
 				}
@@ -74,7 +81,8 @@ public class Factory
 							(int)p.getAmount()));
 					amount -= (int)p.getAmount();
 					workers += (int)p.getAmount();
-					p.change(-(int)p.getAmount());
+					tile.changePopulation(new Population(p.getCulture(), p.getReligion(), "Unemployed",
+							-(int)p.getAmount()));
 				}
 			}
 		}
@@ -139,20 +147,20 @@ public class Factory
 			return;
 		if(money < 0 && workers < 0)
 			closeFactory();
+		profit = money;
 		inputResources();
 		outputResources();
 		payWorkers();
+		profit = money - profit;
 		if(money > 0)
 			hireWorkers();
 		else
 			fireWorkers();
-		if(money > 0)
+		if(money > 0.0d)
 		{
 			tile.getOwner().changeMoney(money);
-			money = 0;
+			money = 0.0d;
 		}
-		
-		System.out.println(workers);
 	}
 	
 	public void update()

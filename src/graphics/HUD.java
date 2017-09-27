@@ -10,6 +10,8 @@ public class HUD
 {
 	public static boolean menuOpen = false;
 	public static boolean interfaceOpen = false;
+	public static boolean buttonClicked = false;
+	private boolean pauseState;
 	private Button colonizeButton;
 	private Button exitGameButton;
 	private Button resumeGameButton;
@@ -51,11 +53,12 @@ public class HUD
 	
 	public void update()
 	{
+		buttonClicked = false;
 		if(numberOfFactories != null)
 		{
 			if(Level.selectedTile != null && Level.selectedTile.getOwner() != null)
 			{
-				if(Keyboard.getKeyPressed(Settings.keyExit))
+				if(Keyboard.getKeyReleased(Settings.keyExit))
 				{
 					interfaceOpen = false;
 					numberOfFactories = null;
@@ -74,7 +77,7 @@ public class HUD
 		{
 			if(Level.selectedTile != null && Level.selectedTile.getOwner() != null)
 			{
-				if(Keyboard.getKeyPressed(Settings.keyExit))
+				if(Keyboard.getKeyReleased(Settings.keyExit))
 				{
 					interfaceOpen = false;
 					buildFactoryButton = null;
@@ -100,7 +103,8 @@ public class HUD
 				exitGameButton = null;
 				resumeGameButton = null;
 				menuOpen = false;
-				Level.date.unpause();
+				if(!pauseState)
+					Level.date.unpause();
 			}
 			else
 			{
@@ -115,6 +119,7 @@ public class HUD
 				{
 					exitGameButton = null;
 					resumeGameButton = null;
+					pauseState = Level.date.getPause();
 					Level.date.unpause();
 					menuOpen = false;
 				}
@@ -126,6 +131,7 @@ public class HUD
 			{
 				exitGameButton = new Button(500.f, 300.f, "Exit game");
 				resumeGameButton = new Button(500.f, 260.f, "Resume game");
+				pauseState = Level.date.getPause();
 				Level.date.pause();
 				menuOpen = true;
 			}
@@ -133,27 +139,27 @@ public class HUD
 		if(resources == null)
 		{
 			String tmp  = "";
-			tmp += "Population: " + String.valueOf(Level.player.getPopulation());
-			tmp += "Food: " + String.valueOf(Level.player.getStockpile("Food")) + "t ";
-			tmp += "Wood: " + String.valueOf(Level.player.getStockpile("Wood")) + "t ";
+			tmp += "Population: " + String.valueOf(Level.player.getPopulation() + " ");
+			tmp += "Food: " + String.format("%.3f", Level.player.getStockpile("Food")) + "t ";
+			tmp += "Wood: " + String.format("%.3f", Level.player.getStockpile("Wood")) + "t ";
 			resources = new Text(100.0f, 20.0f, tmp);
 		}
 		else
 		{
 			String tmp  = "";
-			tmp += "Population: " + String.valueOf(Level.player.getPopulation());
-			tmp += "Food: " + String.format("%.3f", Level.player.getStockpile("Food")) + "t";
-			tmp += " Wood: " + String.valueOf(Level.player.getStockpile("Wood")) + "t";
+			tmp += "Population: " + String.valueOf(Level.player.getPopulation()) + " ";
+			tmp += "Food: " + String.format("%.3f", Level.player.getStockpile("Food")) + "t ";
+			tmp += "Wood: " + String.format("%.3f", Level.player.getStockpile("Wood")) + "t ";
 			resources.setText(tmp);
 		}
 		if(money == null)
 		{
-			String m = "" + (int)Level.player.getMoney();
+			String m = "" + (int)Level.player.getMoney() + "$";
 			money = new Text(0.0f, 20.0f, m);
 		}
 		else
 		{
-			String m = "" + (int)Level.player.getMoney();
+			String m = "" + (int)Level.player.getMoney() + "$";
 			money.setText(m);
 		}
 		if(provinceResource != null)
@@ -162,6 +168,10 @@ public class HUD
 			{
 				provinceResource = null;
 				interfaceOpen = false;
+			}
+			else
+			{
+				provinceResource.setText(Level.selectedTile.getResourceType());
 			}
 		}
 		if(provincePopulation != null)
