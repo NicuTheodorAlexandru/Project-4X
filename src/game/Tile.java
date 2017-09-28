@@ -80,6 +80,10 @@ public class Tile
 	
 	public void colonize(Nation nation)
 	{
+		if(nation.getMoney() >= 1.0d)
+			nation.changeMoney(-1.0d);
+		else
+			return;
 		this.changeOwner(nation);
 		
 		changePopulation(new Population(nation.getCulture(), nation.getReligion(), "Unemployed", 2.0d));

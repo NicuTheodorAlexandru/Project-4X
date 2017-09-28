@@ -5,11 +5,87 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.nio.channels.SeekableByteChannel;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.nanovg.NanoVG;
+import org.lwjgl.system.MemoryUtil;
+
+import main.Main;
 
 public class Utils
 {	
+	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) 
+	{
+        ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
+        buffer.flip();
+        newBuffer.put(buffer);
+        return newBuffer;
+    }
+	
+	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize)
+	{
+        ByteBuffer buffer = null;
+
+        try
+        {
+        	Path path = Paths.get(resource);
+            if (Files.isReadable(path)) 
+            {
+                try (SeekableByteChannel fc = Files.newByteChannel(path)) 
+                {
+                    buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
+                    while (fc.read(buffer) != -1) 
+                    {
+                        ;
+                    }
+                }
+            } else 
+            {
+                try 
+                (
+                    InputStream source = Utils.class.getClass().getResourceAsStream(resource);
+                    ReadableByteChannel rbc = Channels.newChannel(source)
+                ) {
+                    buffer = BufferUtils.createByteBuffer(bufferSize);
+
+                    while (true) 
+                    {
+                        int bytes = rbc.read(buffer);
+                        if (bytes == -1) {
+                            break;
+                        }
+                        if (buffer.remaining() == 0) 
+                        {
+                            buffer = resizeBuffer(buffer, buffer.capacity() * 2);
+                        }
+                    }
+                }
+            }
+            buffer.flip();
+        }catch(IOException err)
+        {
+        	System.err.println(err);
+        }
+        
+        return buffer;
+    }
+	
+	public static int getNanoVGImage(String fileName, int bufferSize)
+	{
+		ByteBuffer buffer = Utils.ioResourceToByteBuffer(fileName, bufferSize);
+		int image = NanoVG.nvgCreateImageMem(Main.vg, NanoVG.NVG_IMAGE_GENERATE_MIPMAPS, buffer);
+		MemoryUtil.memFree(buffer);
+		return image;
+	}
+	
 	public static List<String> readAllLines(String fileName) 
 	{
         List<String> list = new ArrayList<>();
@@ -20,7 +96,6 @@ public class Utils
             }
         } catch (IOException e)
 		{
-			// TODO Auto-generated catch block
 			System.err.println(e);
 		}
         return list;

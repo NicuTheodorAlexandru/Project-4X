@@ -6,6 +6,8 @@ import graphics.Texture;
 
 public class Assets
 {
+	//GUI sprites
+	public static int imgBuild;
 	//text defines
 	public static String charset = "ISO-8859-1";
 	public static Font fntArial = new Font("Consolas", Font.PLAIN, 20);
@@ -36,6 +38,11 @@ public class Assets
 		sprTerrainPlain.cleanup();
 		sprTerrainDesert.cleanup();
 		sprTerrainWater.cleanup();
+	}
+	
+	public static void initNano()
+	{
+		imgBuild = Utils.getNanoVGImage("/images/sprBuild.png", 16 * 1024);
 	}
 	
 	public static void init()

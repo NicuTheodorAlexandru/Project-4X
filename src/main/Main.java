@@ -7,7 +7,6 @@ import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.nanovg.NanoVGGL2;
-import org.lwjgl.nanovg.NanoVGGL3;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
 import game.Level;
@@ -39,7 +38,7 @@ public class Main
 	
 	private void cleanup()
 	{
-		NanoVGGL3.nvgDelete(vg);
+		NanoVGGL2.nvgDelete(vg);
 		renderer.cleanup();
 		Assets.cleanup();
 		window.cleanup();
@@ -72,6 +71,7 @@ public class Main
 		GL.createCapabilities();
 		//GL11.glViewport(0, 0, window.getWindowWidth(), window.getWindowHeight());
 		vg = NanoVGGL2.nvgCreate(0);
+		Assets.initNano();
 		setupFonts();
 		
 		Assets.init();

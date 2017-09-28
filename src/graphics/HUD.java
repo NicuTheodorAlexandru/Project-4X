@@ -2,8 +2,10 @@ package graphics;
 
 import game.Level;
 import gui.Button;
+import gui.guiSprite;
 import input.Keyboard;
 import main.Main;
+import misc.Assets;
 import misc.Settings;
 
 public class HUD
@@ -44,7 +46,8 @@ public class HUD
 					int pop = (int)Level.selectedTile.getPopulation();
 					String p = "" + pop;
 					provincePopulation = new Text(0.0f, Main.window.getWindowHeight(), p);
-					buildFactoryButton = new Button(0.0f, Main.window.getWindowHeight() - 80.0f, "Build farm");
+					buildFactoryButton = new Button(0.0f, Main.window.getWindowHeight() - 100.0f, 
+							new guiSprite(Assets.imgBuild));
 					numberOfFactories = new Text(0.0f, Main.window.getWindowHeight() - 60.0f, "");
 				}
 			}

@@ -65,6 +65,7 @@ public class Text
 		NanoVG.nvgFontFace(Main.vg, fontName);
 		NanoVG.nvgTextAlign(Main.vg, NanoVG.NVG_ALIGN_LEFT);
 		NanoVG.nvgFontBlur(Main.vg, 0);
+		NanoVG.nvgFillColor(Main.vg, color);
 		NanoVG.nvgText(Main.vg, x, y, text);
 	}
 	

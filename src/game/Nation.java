@@ -85,7 +85,7 @@ public class Nation
 	{	
 		this.color = color;
 		this.name = name;
-		money = 0.0d;
+		money = 1.0d;
 		
 		storage = new HashMap<>();
 		stockpile = new HashMap<>();

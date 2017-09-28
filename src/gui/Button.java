@@ -14,6 +14,7 @@ public class Button
 	private float y;
 	private float width;
 	private float height;
+	private guiSprite sprite;
 	private Text text;
 	private boolean activated;
 	
@@ -47,16 +48,36 @@ public class Button
 	
 	public void render()
 	{
-		text.render();
-		NanoVG.nvgBeginPath(Main.vg);
-		NVGColor color = NVGColor.create();
-		color.a(1.0f);
-		color.r(0.0f);
-		color.g(0.0f);
-		color.b(0.0f);
-		NanoVG.nvgRect(Main.vg, x, y, width, height);
+		if(text != null)
+		{
+			NanoVG.nvgBeginPath(Main.vg);
+			NVGColor color = NVGColor.create();
+			color.a(1.0f);
+			color.r(1.0f);
+			color.g(1.0f);
+			color.b(1.0f);
+			NanoVG.nvgRect(Main.vg, x, y, width, -height);
+			NanoVG.nvgFillColor(Main.vg, color);
+			NanoVG.nvgFill(Main.vg);
+			text.render();
+		}
+		else
+		{
+			sprite.render();
+		}
 	}
 	
+	public Button(float x, float y, guiSprite sprite)
+	{
+		activated = false;
+		this.x = x;
+		this.y = y;
+		this.sprite = sprite;
+		width = sprite.getWidth();
+		height = sprite.getHeight();
+		sprite.setX(x);
+		sprite.setY(y);
+	}
 	
 	public Button(float x, float y, String text)
 	{
