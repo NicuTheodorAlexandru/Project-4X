@@ -16,6 +16,21 @@ public class Text
 	private float width;
 	private float height;
 	
+	public float getY()
+	{
+		return y;
+	}
+	
+	public float getX()
+	{
+		return x;
+	}
+	
+	public void changeY(float value)
+	{
+		y += value;
+	}
+	
 	public float getHeight()
 	{
 		return height;

@@ -15,6 +15,8 @@ public class Settings
 	public static int keyFasterSpeed = GLFW.GLFW_KEY_KP_ADD;
 	public static int keySlowerSpeed = GLFW.GLFW_KEY_KP_SUBTRACT;
 	public static int keyPauseGame = GLFW.GLFW_KEY_SPACE;
+	public static int keyScrollUp = GLFW.GLFW_KEY_UP;
+	public static int keyScrollDown = GLFW.GLFW_KEY_DOWN;
 	//settings
 	//window settings
 	public static boolean borderless = true;

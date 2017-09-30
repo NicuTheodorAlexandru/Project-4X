@@ -121,6 +121,7 @@ public class Main
 	{
 		String path = new File("D:/Downloads/Consolas.ttf").getAbsolutePath();
 		NanoVG.nvgCreateFont(Main.vg, "Consolas", path);
+		
 	}
 	
 	private void renderGui()

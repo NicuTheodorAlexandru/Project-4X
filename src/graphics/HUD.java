@@ -1,7 +1,7 @@
 package graphics;
 
 import game.Level;
-import gui.Button;
+import gui.guiButton;
 import gui.guiSprite;
 import input.Keyboard;
 import main.Main;
@@ -14,10 +14,10 @@ public class HUD
 	public static boolean interfaceOpen = false;
 	public static boolean buttonClicked = false;
 	private boolean pauseState;
-	private Button colonizeButton;
-	private Button exitGameButton;
-	private Button resumeGameButton;
-	private Button buildFactoryButton;
+	private guiButton colonizeButton;
+	private guiButton exitGameButton;
+	private guiButton resumeGameButton;
+	private guiButton buildFactoryButton;
 	private Text provincePopulation;
 	private Text numberOfFactories;
 	private Text provinceResource;
@@ -37,7 +37,7 @@ public class HUD
 				{
 					if(colonizeButton == null)
 					{
-						colonizeButton = new Button(0.0f, Main.window.getWindowHeight(), "Colonize");
+						colonizeButton = new guiButton(0.0f, Main.window.getWindowHeight(), "Colonize");
 					}
 				}
 				else
@@ -46,7 +46,7 @@ public class HUD
 					int pop = (int)Level.selectedTile.getPopulation();
 					String p = "" + pop;
 					provincePopulation = new Text(0.0f, Main.window.getWindowHeight(), p);
-					buildFactoryButton = new Button(0.0f, Main.window.getWindowHeight() - 100.0f, 
+					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 100.0f, 
 							new guiSprite(Assets.imgBuild));
 					numberOfFactories = new Text(0.0f, Main.window.getWindowHeight() - 60.0f, "");
 				}
@@ -132,8 +132,8 @@ public class HUD
 		{
 			if(Keyboard.getKeyReleased(Settings.keyExit) && !interfaceOpen)
 			{
-				exitGameButton = new Button(500.f, 300.f, "Exit game");
-				resumeGameButton = new Button(500.f, 260.f, "Resume game");
+				exitGameButton = new guiButton(500.f, 300.f, "Exit game");
+				resumeGameButton = new guiButton(500.f, 260.f, "Resume game");
 				pauseState = Level.date.getPause();
 				Level.date.pause();
 				menuOpen = true;

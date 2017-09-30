@@ -8,7 +8,7 @@ import graphics.Text;
 import input.Mouse;
 import main.Main;
 
-public class Button
+public class guiButton
 {
 	private float x;
 	private float y;
@@ -67,7 +67,7 @@ public class Button
 		}
 	}
 	
-	public Button(float x, float y, guiSprite sprite)
+	public guiButton(float x, float y, guiSprite sprite)
 	{
 		activated = false;
 		this.x = x;
@@ -79,7 +79,7 @@ public class Button
 		sprite.setY(y);
 	}
 	
-	public Button(float x, float y, String text)
+	public guiButton(float x, float y, String text)
 	{
 		activated = false;
 		this.x = x;

@@ -1,6 +1,10 @@
-/misc/
+/fonts/
+/game/
+/graphics/
 /gui/
 /images/
-/graphics/
-/game/
+/input/
 /main/
+/misc/
+/models/
+/shaders/
