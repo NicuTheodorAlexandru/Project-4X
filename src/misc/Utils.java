@@ -24,16 +24,18 @@ public class Utils
 {	
 	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) 
 	{
-        ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
+        ByteBuffer newBuffer = MemoryUtil.memAlloc(newCapacity);
         buffer.flip();
         newBuffer.put(buffer);
+        MemoryUtil.memFree(buffer);
+        buffer = null;
         return newBuffer;
     }
 	
 	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize)
 	{
         ByteBuffer buffer = null;
-
+        
         try
         {
         	Path path = Paths.get(resource);
@@ -41,25 +43,26 @@ public class Utils
             {
                 try (SeekableByteChannel fc = Files.newByteChannel(path)) 
                 {
-                    buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
+                    buffer = MemoryUtil.memAlloc((int)fc.size() + 1);
                     while (fc.read(buffer) != -1) 
                     {
                         ;
                     }
                 }
-            } else 
+            } 
+            else 
             {
                 try 
-                (
+                {
                     InputStream source = Utils.class.getClass().getResourceAsStream(resource);
-                    ReadableByteChannel rbc = Channels.newChannel(source)
-                ) {
-                    buffer = BufferUtils.createByteBuffer(bufferSize);
+                    ReadableByteChannel rbc = Channels.newChannel(source);
+                    buffer = MemoryUtil.memAlloc(bufferSize);
 
                     while (true) 
                     {
                         int bytes = rbc.read(buffer);
-                        if (bytes == -1) {
+                        if (bytes == -1) 
+                        {
                             break;
                         }
                         if (buffer.remaining() == 0) 
@@ -67,6 +70,10 @@ public class Utils
                             buffer = resizeBuffer(buffer, buffer.capacity() * 2);
                         }
                     }
+                }
+                catch(IOException err)
+                {
+                	System.err.println(err);
                 }
             }
             buffer.flip();
