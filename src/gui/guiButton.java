@@ -17,32 +17,6 @@ public class guiButton
 	private guiSprite sprite;
 	private Text text;
 	private boolean activated;
-	private boolean pressed;
-	
-	public boolean getPressed()
-	{
-		return pressed;
-	}
-	
-	public void setY(double value)
-	{
-		y = (float)value;
-	}
-	
-	public double getY()
-	{
-		return y;
-	}
-	
-	public double getX()
-	{
-		return x;
-	}
-	
-	public void changeY(double value)
-	{
-		y += value;
-	}
 	
 	private void clicked()
 	{
@@ -52,23 +26,10 @@ public class guiButton
 			float y = (float)Mouse.getMousePosition().y;
 			if(this.x <= x && this.x + width >= x)
 			{
-				if(this.y <= y && this.y + height >= y)
+				if(this.y >= y && this.y - height <= y)
 				{
 					activated = true;
-					pressed = false;
 					HUD.buttonClicked = true;
-				}
-			}
-		}
-		if(Mouse.isLeftButtonPressed())
-		{
-			float x = (float)Mouse.getMousePosition().x;
-			float y = (float)Mouse.getMousePosition().y;
-			if(this.x <= x && this.x + width >= x)
-			{
-				if(this.y <= y && this.y + height >= y)
-				{
-					pressed = true;
 				}
 			}
 		}
@@ -95,7 +56,7 @@ public class guiButton
 			color.r(1.0f);
 			color.g(1.0f);
 			color.b(1.0f);
-			NanoVG.nvgRect(Main.vg, x, y, width, height);
+			NanoVG.nvgRect(Main.vg, x, y, width, -height);
 			NanoVG.nvgFillColor(Main.vg, color);
 			NanoVG.nvgFill(Main.vg);
 			text.render();
@@ -108,7 +69,7 @@ public class guiButton
 	
 	public guiButton(float x, float y, guiSprite sprite)
 	{
-		pressed = activated = false;
+		activated = false;
 		this.x = x;
 		this.y = y;
 		this.sprite = sprite;
@@ -120,7 +81,7 @@ public class guiButton
 	
 	public guiButton(float x, float y, String text)
 	{
-		pressed = activated = false;
+		activated = false;
 		this.x = x;
 		this.y = y;
 		this.text = new Text(x, y, text);

@@ -81,7 +81,7 @@ public class Text
 		NanoVG.nvgTextAlign(Main.vg, NanoVG.NVG_ALIGN_LEFT);
 		NanoVG.nvgFontBlur(Main.vg, 0);
 		NanoVG.nvgFillColor(Main.vg, color);
-		NanoVG.nvgText(Main.vg, x, y + fontSize, text);
+		NanoVG.nvgText(Main.vg, x, y, text);
 	}
 	
 	public void setText(String text)

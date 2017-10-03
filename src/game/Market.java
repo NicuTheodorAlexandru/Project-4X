@@ -13,8 +13,8 @@ public class Market
 	{
 		double money = amount * prices.get(resource);
 		double price = prices.get(resource) - priceChangePerUnit * amount;
-		if(price < 0.01d)
-			price = 0.01d;
+		if(price < 0.00001d)
+			price = 0.00001d;
 		prices.put(resource, price);
 		factory.changeStockpile(resource, -amount);
 		factory.changeMoney(money);
@@ -63,8 +63,8 @@ public class Market
 		}
 		money = amount * prices.get(resource);
 		double price = prices.get(resource) - priceChangePerUnit * amount;
-		if(price < 0.01d)
-			price = 0.01d;
+		if(price < 0.00001d)
+			price = 0.00001d;
 		prices.put(resource, price);
 		nation.changeStockpile(resource, -amount);
 		

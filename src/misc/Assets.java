@@ -49,11 +49,11 @@ public class Assets
 	public static void initNano()
 	{
 		//fonts
-		ByteBuffer buffer = null;
+		//ByteBuffer buffer;
 		//int x = 0;
-		buffer = Utils.ioResourceToByteBuffer("/fonts/Consolas.ttf", 1024 * 1024);
-		NanoVG.nvgCreateFontMem(Main.vg, "Consolas", buffer, 0);
-		MemoryUtil.memFree(buffer);
+		//buffer = Utils.ioResourceToByteBuffer("/fonts/Consolas.ttf", 1024 * 1024);
+		//NanoVG.nvgCreateFontMem(Main.vg, "Consolas", buffer, x);
+		//MemoryUtil.memFree(buffer);
 		//images
 		imgBuild = Utils.getNanoVGImage("/images/sprBuild.png", 16 * 1024);
 	}
