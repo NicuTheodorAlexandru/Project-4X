@@ -119,9 +119,8 @@ public class Main
 	
 	private void setupFonts()
 	{
-		String path = new File("D:/Downloads/Consolas.ttf").getAbsolutePath();
-		NanoVG.nvgCreateFont(Main.vg, "Consolas", path);
-		
+		//String path = new File("D:/Downloads/Consolas.ttf").getAbsolutePath();
+		//NanoVG.nvgCreateFont(Main.vg, "Consolas", path);
 	}
 	
 	private void renderGui()

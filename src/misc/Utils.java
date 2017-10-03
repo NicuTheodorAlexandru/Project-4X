@@ -27,13 +27,15 @@ public class Utils
         ByteBuffer newBuffer = MemoryUtil.memAlloc(newCapacity);
         buffer.flip();
         newBuffer.put(buffer);
+        MemoryUtil.memFree(buffer);
+        buffer = null;
         return newBuffer;
     }
 	
 	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize)
 	{
         ByteBuffer buffer = null;
-
+        
         try
         {
         	Path path = Paths.get(resource);
@@ -50,6 +52,8 @@ public class Utils
             } 
             else 
             {
+                try 
+                {
                     InputStream source = Utils.class.getClass().getResourceAsStream(resource);
                     ReadableByteChannel rbc = Channels.newChannel(source);
                     buffer = MemoryUtil.memAlloc(bufferSize);
@@ -66,6 +70,11 @@ public class Utils
                             buffer = resizeBuffer(buffer, buffer.capacity() * 2);
                         }
                     }
+                }
+                catch(IOException err)
+                {
+                	System.err.println(err);
+                }
             buffer.flip();
             }
         }catch(IOException err)

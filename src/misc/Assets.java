@@ -2,10 +2,8 @@ package misc;
 
 import java.awt.Font;
 import java.nio.ByteBuffer;
-
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.system.MemoryUtil;
-
 import graphics.Sprite;
 import graphics.Texture;
 import main.Main;
@@ -44,14 +42,14 @@ public class Assets
 		sprTerrainPlain.cleanup();
 		sprTerrainDesert.cleanup();
 		sprTerrainWater.cleanup();
+		//
 	}
 	
 	public static void initNano()
 	{
 		//fonts
 		ByteBuffer buffer = null;
-		//int x = 0;
-		buffer = Utils.ioResourceToByteBuffer("/fonts/Consolas.ttf", 1024 * 1024);
+		buffer = Utils.ioResourceToByteBuffer("/fonts/Consolas.ttf", 450 * 1024);
 		NanoVG.nvgCreateFontMem(Main.vg, "Consolas", buffer, 0);
 		MemoryUtil.memFree(buffer);
 		//images
