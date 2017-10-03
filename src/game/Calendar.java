@@ -155,6 +155,6 @@ public class Calendar
 		this.day = day;
 		this.month = month;
 		this.year = year;
-		date = new Text(Main.window.getWindowWidth() - 250.0f, 20.0f, time);
+		date = new Text(Main.window.getWindowWidth() - 250.0f, 0.0f, time);
 	}
 }

@@ -1,29 +1,31 @@
 package gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.nanovg.NanoVG;
-
-import graphics.Text;
-import input.Keyboard;
+import input.Mouse;
 import main.Main;
-import misc.Settings;
 
 public class guiList 
 {
-	private List<Text> texts;
-	private float x, y;
-	private float width, height;
-	private float scroll;
-	private float scrollSpeed;
+	protected float x, y;
+	protected float width, height;
+	protected float scroll;
+	protected float scrollSpeed;
+	private float exY;
+	private guiButton scrollButton;
+	
+	private void follow()
+	{
+		scrollButton.setY(Mouse.getMousePosition().y);
+	}
 	
 	private void scroll()
 	{
-		if(Keyboard.getKey(Settings.keyScrollUp))
-			scroll -= scrollSpeed;
-		else if(Keyboard.getKey(Settings.keyScrollDown))
-			scroll += scrollSpeed;
+		if(scrollButton.getActivated())
+		{
+			follow();
+		}
+		scroll += scrollButton.getY() - exY;
+		exY = (float)scrollButton.getY();
 	}
 	
 	public void update()
@@ -36,45 +38,17 @@ public class guiList
 		NanoVG.nvgBeginPath(Main.vg);
 		NanoVG.nvgRect(Main.vg, x, y, width, height);
 		NanoVG.nvgFill(Main.vg);
-		for(Text text: texts)
-		{
-			text.changeY(scroll);
-			if(text.getY() >= y && text.getY() + text.getHeight() <= y)
-				text.render();
-			text.changeY(-scroll);
-		}
-	}
-	
-	public void delText(Text text)
-	{
-		if(texts.contains(text))
-			texts.remove(text);
-		else
-		{
-			int length = texts.size();
-			for(int i = 0; i < length; i++)
-			{
-				Text t = texts.get(i);
-				if(t.getText() == text.getText())
-				{
-					texts.remove(t);
-					i--;
-					length--;
-				}
-			}
-		}
-	}
-	
-	public void addText(Text text)
-	{
-		texts.add(text);
+		
+		scrollButton.render();
 	}
 	
 	public guiList(float x, float y, float width, float height)
 	{
-		texts = new ArrayList<>();
+		scrollButton = new guiButton(x + width, y, "S" + System.lineSeparator() + "C");
+		
 		scroll = 0.0f;
 		scrollSpeed = 0.1f;
+		exY = y;
 		
 		this.x = x;
 		this.y = y;
