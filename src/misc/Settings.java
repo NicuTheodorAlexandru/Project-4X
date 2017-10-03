@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW;
 public class Settings
 {
 	//keys
+	public static int keyOpenResourceList = GLFW.GLFW_KEY_E;
 	public static int keyMoveCameraUp = GLFW.GLFW_KEY_W;
 	public static int keyMoveCameraDown = GLFW.GLFW_KEY_S;
 	public static int keyMoveCameraLeft = GLFW.GLFW_KEY_A;

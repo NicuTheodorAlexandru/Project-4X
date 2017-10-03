@@ -2,6 +2,7 @@ package graphics;
 
 import game.Level;
 import gui.guiButton;
+import gui.guiResourceList;
 import gui.guiSprite;
 import input.Keyboard;
 import main.Main;
@@ -14,6 +15,7 @@ public class HUD
 	public static boolean interfaceOpen = false;
 	public static boolean buttonClicked = false;
 	private boolean pauseState;
+	private guiResourceList resourceList;
 	private guiButton colonizeButton;
 	private guiButton exitGameButton;
 	private guiButton resumeGameButton;
@@ -32,12 +34,12 @@ public class HUD
 			{
 				interfaceOpen = true;
 				String res = Level.selectedTile.getResourceType();
-				provinceResource = new Text(0.0f, Main.window.getWindowHeight() - 25.0f, res);
+				provinceResource = new Text(0.0f, Main.window.getWindowHeight() - 45.0f, res);
 				if(Level.selectedTile.getOwner() == null)
 				{
 					if(colonizeButton == null)
 					{
-						colonizeButton = new guiButton(0.0f, Main.window.getWindowHeight(), "Colonize");
+						colonizeButton = new guiButton(0.0f, Main.window.getWindowHeight() - 20.0f, "Colonize");
 					}
 				}
 				else
@@ -45,8 +47,8 @@ public class HUD
 					interfaceOpen = true;
 					int pop = (int)Level.selectedTile.getPopulation();
 					String p = "" + pop;
-					provincePopulation = new Text(0.0f, Main.window.getWindowHeight(), p);
-					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 100.0f, 
+					provincePopulation = new Text(0.0f, Main.window.getWindowHeight() - 20.0f, p);
+					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 80.0f, 
 							new guiSprite(Assets.imgBuild));
 					numberOfFactories = new Text(0.0f, Main.window.getWindowHeight() - 60.0f, "");
 				}
@@ -57,6 +59,7 @@ public class HUD
 	public void update()
 	{
 		buttonClicked = false;
+		resourceList.update();
 		if(numberOfFactories != null)
 		{
 			if(Level.selectedTile != null && Level.selectedTile.getOwner() != null)
@@ -145,7 +148,7 @@ public class HUD
 			tmp += "Population: " + String.valueOf(Level.player.getPopulation() + " ");
 			tmp += "Food: " + String.format("%.3f", Level.player.getStockpile("Food")) + "t ";
 			tmp += "Wood: " + String.format("%.3f", Level.player.getStockpile("Wood")) + "t ";
-			resources = new Text(100.0f, 20.0f, tmp);
+			resources = new Text(100.0f, 0.0f, tmp);
 		}
 		else
 		{
@@ -157,12 +160,12 @@ public class HUD
 		}
 		if(money == null)
 		{
-			String m = "" + (int)Level.player.getMoney() + "$";
-			money = new Text(0.0f, 20.0f, m);
+			String m = "" + String.format("%.2f", Level.player.getMoney()) + "$";
+			money = new Text(0.0f, 0.0f, m);
 		}
 		else
 		{
-			String m = "" + (int)Level.player.getMoney() + "$";
+			String m = "" + String.format("%.2f", Level.player.getMoney()) + "$";
 			money.setText(m);
 		}
 		if(provinceResource != null)
@@ -214,6 +217,7 @@ public class HUD
 	
 	public void render()
 	{
+		resourceList.render();
 		if(numberOfFactories != null)
 			numberOfFactories.render();
 		if(buildFactoryButton != null)
@@ -236,6 +240,6 @@ public class HUD
 	
 	public HUD()
 	{
-		
+		resourceList = new guiResourceList(200, 200, 200, 200);
 	}
 }
