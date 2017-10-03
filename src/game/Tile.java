@@ -2,6 +2,11 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.joml.Vector3f;
+import org.joml.Vector4f;
+
+import graphics.Border;
 import graphics.Model;
 import graphics.Renderer;
 import graphics.Sprite;
@@ -17,11 +22,23 @@ public class Tile
 	private String resourceType;
 	private String terrainType;
 	private Nation owner;
+	private Border borderNorth, borderWest, borderSouth, borderEast;
+	public Tile north, west, south, east;
 	private float x, y;
 	private float populationGrowth;
 	private float resourceOutput;
 	private float productionPerPop;
 	private float foodPerPop;
+	
+	private void updateBorder()
+	{
+		if(north != null && north.getOwner() != owner && borderNorth == null)
+		{
+			Vector3f pos1 = new Vector3f(x, y, 0);
+			Vector3f pos2 = new Vector3f(x + 2.0f, y + 2.0f, 0);
+			borderNorth = new Border(pos1, pos2, new Vector4f(owner.getColor(), 1.0f));
+		}
+	}
 	
 	public List<Population> getPops()
 	{
@@ -40,11 +57,14 @@ public class Tile
 	
 	public void buildFarm()
 	{
-		if(owner.getStockpile("Wood") >= 1.0f)
-			owner.changeStockpile("Wood", -1.0f);
+		if(owner.getStockpile("Wood") >= 0.01f && owner.getMoney() >= 0.01f)
+		{
+			owner.changeStockpile("Wood", -0.01f);
+			owner.changeMoney(-0.01f);
+		}
 		else
 			return;
-		float money = 10.0f;
+		float money = 0.01f;
 		float pay = 0.00001f;
 		int baseWorkspace = 1000;
 		float baseProduction = 1.0f;
@@ -246,11 +266,16 @@ public class Tile
 	public void render()
 	{
 		Renderer.provinces.add(this);
+		if(borderNorth != null)
+			Renderer.models.add(borderNorth.getModel());
 	}
 	
 	public void updateOnHour()
 	{
-		
+		if(owner != null)
+		{
+			updateBorder();
+		}
 	}
 	
 	public void updateOnDay()

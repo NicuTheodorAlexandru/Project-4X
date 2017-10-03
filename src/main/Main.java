@@ -1,6 +1,5 @@
 package main;
 
-import java.io.File;
 import java.util.Random;
 import misc.Timer;
 import org.joml.Vector3f;
