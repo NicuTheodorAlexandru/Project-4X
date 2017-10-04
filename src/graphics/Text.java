@@ -1,14 +1,20 @@
 package graphics;
 
+import java.io.Serializable;
+
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
 import main.Main;
 
-public class Text
+public class Text implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1914974323957980651L;
 	private String text;
-	private NVGColor color;
+	private transient NVGColor color;
 	private String fontName;
 	private float fontSize;
 	private float x;

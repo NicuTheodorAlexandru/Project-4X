@@ -1,11 +1,16 @@
 package game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import misc.Defines;
 
-public class Market
+public class Market implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 759093621811953565L;
 	private HashMap<String, Double> prices;
 	private final double priceChangePerUnit;
 	

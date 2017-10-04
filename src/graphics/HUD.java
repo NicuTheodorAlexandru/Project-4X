@@ -1,6 +1,7 @@
 package graphics;
 
 import game.Level;
+import game.SaveGame;
 import gui.guiButton;
 import gui.guiResourceList;
 import gui.guiSprite;
@@ -19,6 +20,7 @@ public class HUD
 	private guiButton colonizeButton;
 	private guiButton exitGameButton;
 	private guiButton resumeGameButton;
+	private guiButton saveGameButton;
 	private guiButton buildFactoryButton;
 	private Text provincePopulation;
 	private Text numberOfFactories;
@@ -108,12 +110,16 @@ public class HUD
 			{
 				exitGameButton = null;
 				resumeGameButton = null;
+				saveGameButton = null;
 				menuOpen = false;
 				if(!pauseState)
 					Level.date.unpause();
 			}
 			else
 			{
+				saveGameButton.update();
+				if(saveGameButton.getActivated())
+					SaveGame.saveGame("save");
 				exitGameButton.update();
 				if(exitGameButton.getActivated())
 				{
@@ -137,6 +143,7 @@ public class HUD
 			{
 				exitGameButton = new guiButton(500.f, 300.f, "Exit game");
 				resumeGameButton = new guiButton(500.f, 260.f, "Resume game");
+				saveGameButton = new guiButton(500.f, 280.f, "Save game");
 				pauseState = Level.date.getPause();
 				Level.date.pause();
 				menuOpen = true;
@@ -222,6 +229,8 @@ public class HUD
 			numberOfFactories.render();
 		if(buildFactoryButton != null)
 			buildFactoryButton.render();
+		if(saveGameButton != null)
+			saveGameButton.render();
 		if(resumeGameButton != null)
 			resumeGameButton.render();
 		if(exitGameButton != null)

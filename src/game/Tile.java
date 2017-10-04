@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,15 +15,19 @@ import graphics.Texture;
 import main.Main;
 import misc.Defines;
 
-public class Tile
+public class Tile implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7602316466663527490L;
 	private List<Population> pops;
 	private List<Factory> factories;
-	private Sprite sprite;
+	private transient Sprite sprite;
 	private String resourceType;
 	private String terrainType;
 	private Nation owner;
-	private Border borderNorth, borderWest, borderSouth, borderEast;
+	private transient Border borderNorth, borderWest, borderSouth, borderEast;
 	public Tile north, west, south, east;
 	private float x, y;
 	private float populationGrowth;
@@ -228,6 +233,25 @@ public class Tile
 		owner.changeStockpile(resourceType, getResourceOutput());
 	}
 	
+	public void initGraphics()
+	{
+		if(terrainType == "Plain")
+		{
+			sprite = new Sprite(new Texture("/images/sprTerrainPlain.png"));
+		}
+		else if(terrainType == "Desert")
+		{
+			sprite = new Sprite(new Texture("/images/sprTerrainDesert.png"));
+		}
+		else if(terrainType == "Water")
+		{
+			sprite = new Sprite(new Texture("/images/sprTerrainWater.png"));
+		}
+		
+		sprite.getModel().setX(this.x);
+		sprite.getModel().setY(this.y);
+	}
+	
 	public Tile(float x, float y)
 	{
 		factories = new ArrayList<>();
@@ -245,22 +269,8 @@ public class Tile
 				Defines.terrainTypes.length)];
 		resourceType = Defines.resourceTypes[Main.randomGenerator.nextInt(
 				Defines.resourceTypes.length)];
-
-		if(terrainType == "Plain")
-		{
-			sprite = new Sprite(new Texture("/images/sprTerrainPlain.png"));
-		}
-		else if(terrainType == "Desert")
-		{
-			sprite = new Sprite(new Texture("/images/sprTerrainDesert.png"));
-		}
-		else if(terrainType == "Water")
-		{
-			sprite = new Sprite(new Texture("/images/sprTerrainWater.png"));
-		}
 		
-		sprite.getModel().setX(this.x);
-		sprite.getModel().setY(this.y);
+		initGraphics();
 	}
 	
 	public void render()

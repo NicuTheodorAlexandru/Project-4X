@@ -1,9 +1,14 @@
 package game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Factory
+public class Factory implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6972056149906269828L;
 	private HashMap<String, Double> stockpile;
 	private Tile tile;
 	private float baseProduction;

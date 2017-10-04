@@ -14,6 +14,7 @@ import graphics.HUD;
 import graphics.Renderer;
 import input.Keyboard;
 import input.Mouse;
+import menu.MainMenu;
 import misc.Assets;
 import misc.Defines;
 import game.Nation;
@@ -25,12 +26,13 @@ public class Main
 	public static Window window;
 	public static Camera camera;
 	public static long vg;
-	private Level level;
+	public static Level level;
 	private Timer timer;
 	private Renderer renderer;
 	private Keyboard keyboard;
 	private Mouse mouse;
-	private HUD hud;
+	public static HUD hud;
+	private MainMenu mainMenu;
 	private boolean debug = true;
 	private double lastFps = 0;
 	public static long frame;
@@ -71,19 +73,16 @@ public class Main
 		//GL11.glViewport(0, 0, window.getWindowWidth(), window.getWindowHeight());
 		vg = NanoVGGL2.nvgCreate(0);
 		Assets.initNano();
-		setupFonts();
 		
 		Assets.init();
 		randomGenerator = new Random();
-		level = new Level(new Nation("Prussia", "Prussian", "Protestant", 
-				new Vector3f(0.0f, 0.192f, 0.325f)), 5, 5);
 		renderer = new Renderer();
 		renderer.init();
 		camera = new Camera();
 		running = true;
 		keyboard = new Keyboard(window.getWindowID());
 		mouse = new Mouse(window);
-		hud = new HUD();
+		mainMenu = new MainMenu();
 		frame = 0;
 		
 		GL11.glClearColor(1.0f, 0.5f, 0.2f, 0.0f);
@@ -101,12 +100,14 @@ public class Main
 		
 		window.update();
 		
-		camera.update();
-		
-		hud.update();
-		
 		if(level != null)
+		{
+			camera.update();
+			hud.update();
 			level.update();
+		}
+		else if(mainMenu != null)
+			mainMenu.update();
 	}
 	
 	private void openGLFlags()
@@ -116,20 +117,20 @@ public class Main
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 	}
 	
-	private void setupFonts()
-	{
-		//String path = new File("D:/Downloads/Consolas.ttf").getAbsolutePath();
-		//NanoVG.nvgCreateFont(Main.vg, "Consolas", path);
-	}
-	
 	private void renderGui()
 	{
 		NanoVG.nvgSave(vg);
 		float pixelRatio = window.getWindowWidth() / window.getWindowHeight();
 		NanoVG.nvgBeginFrame(vg, window.getWindowWidth(), 
 				window.getWindowHeight(), pixelRatio);
-		//render start
-		hud.render();
+		//render starts
+		
+		if(level != null)
+		{
+			hud.render();
+		}
+		else if(mainMenu != null)
+			mainMenu.render();
 		//render end
 		NanoVG.nvgEndFrame(vg);
 		//NanoVG.nvgSave(Main.vg);
@@ -143,7 +144,6 @@ public class Main
 		renderer.clear();
 		window.clear();
 		
-		hud.render();
 		if(level != null)
 			level.render();
 		

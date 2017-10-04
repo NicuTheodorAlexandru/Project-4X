@@ -1,13 +1,31 @@
 package game;
 
+import java.io.Serializable;
+
 import misc.Defines;
 
-public class World
+public class World implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3379923225982945931L;
 	private Tile[][] tiles;
 	private int widthTiles, heightTiles;
 	public static Market market;
 	
+	public void load()
+	{
+		for(int i = 0; i < widthTiles; i++)
+		{
+			for(int j = 0; j < heightTiles; j++)
+			{
+				tiles[i][j].initGraphics();
+				if(tiles[i][j].getModel().getSelected())
+					Level.selectedTile = tiles[i][j];
+			}
+		}
+	}
 	
 	private void generateWorld(int widthTiles, int heightTiles)
 	{

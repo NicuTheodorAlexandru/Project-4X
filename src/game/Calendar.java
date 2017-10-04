@@ -1,13 +1,19 @@
 package game;
 
+import java.io.Serializable;
+
 import graphics.HUD;
 import graphics.Text;
 import input.Keyboard;
 import main.Main;
 import misc.Settings;
 
-public class Calendar
+public class Calendar implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9082715702808406330L;
 	private boolean pause;
 	private String[] months;
 	private int hour;

@@ -1,5 +1,6 @@
 package misc;
 
+import java.io.Serializable;
 import java.util.List;
 import org.joml.Intersectionf;
 import org.joml.Vector2f;
@@ -10,8 +11,12 @@ import graphics.Camera;
 import graphics.Model;
 import graphics.Renderer;
 
-public class CameraBoxSelection
+public class CameraBoxSelection implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1732594474189221829L;
 	private final Vector3f max;
 	private final Vector3f min;
 	private final Vector2f nearFar;

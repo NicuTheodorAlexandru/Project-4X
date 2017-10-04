@@ -1,10 +1,16 @@
 package graphics;
 
+import java.io.Serializable;
+
 import misc.Defines;
 import misc.OBJLoader;
 
-public class Sprite
+public class Sprite implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 4011551591976729247L;
 	private float base = 1.0f;
 	private Model model;
 	private Texture texture;

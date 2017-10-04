@@ -15,6 +15,10 @@ import main.Window;
 
 public class MouseBoxSelection extends CameraBoxSelection
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6068318501333708770L;
 	private final Matrix4f invProjectionMatrix;
 	private final Matrix4f invViewMatrix;
 	private final Vector3f mouseDir;

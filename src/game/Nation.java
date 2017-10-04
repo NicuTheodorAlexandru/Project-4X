@@ -1,13 +1,18 @@
 package game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.joml.Vector3f;
 
 import misc.Defines;
 
-public class Nation
+public class Nation implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4365089421575696350L;
 	private final Vector3f color;
 	private String name;
 	private String culture;
