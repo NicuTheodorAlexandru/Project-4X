@@ -16,8 +16,8 @@ public class SaveGame
 			File file = new File("src/saves/" + filename);
 			if(file.exists())
 			{
-				file.delete();
-				file.mkdir();
+				for(File f: file.listFiles())
+					f.delete();
 			}
 			else
 			{
@@ -42,14 +42,14 @@ public class SaveGame
 			//save player
 			f = new FileOutputStream("src/saves/" + filename + "/" + "player.save");
 			o = new ObjectOutputStream(f);
-			o.writeObject(Main.level.player);
+			o.writeObject(Level.player);
 			o.flush();
 			o.close();
 			f.close();
 			//save calendar
 			f = new FileOutputStream("src/saves/" + filename + "/" + "calendar.save");
 			o = new ObjectOutputStream(f);
-			o.writeObject(Main.level.date);
+			o.writeObject(Level.date);
 			o.flush();
 			o.close();
 			f.close();

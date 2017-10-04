@@ -2,7 +2,6 @@ package main;
 
 import java.util.Random;
 import misc.Timer;
-import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.nanovg.NanoVGGL2;
@@ -17,7 +16,6 @@ import input.Mouse;
 import menu.MainMenu;
 import misc.Assets;
 import misc.Defines;
-import game.Nation;
 
 public class Main
 {

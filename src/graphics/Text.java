@@ -2,6 +2,7 @@ package graphics;
 
 import java.io.Serializable;
 
+import org.joml.Vector4f;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
@@ -14,7 +15,7 @@ public class Text implements Serializable
 	 */
 	private static final long serialVersionUID = 1914974323957980651L;
 	private String text;
-	private transient NVGColor color;
+	private Vector4f color;
 	private String fontName;
 	private float fontSize;
 	private float x;
@@ -73,14 +74,19 @@ public class Text implements Serializable
 	
 	public void setColor(float red, float green, float blue, float alpha)
 	{
-		color.r(red / 255.0f);
-		color.g(green / 255.0f);
-		color.b(blue / 255.0f);
-		color.a(alpha / 255.0f);
+		color.x = (red / 255.0f);
+		color.y = (green / 255.0f);
+		color.z = (blue / 255.0f);
+		color.w = (alpha / 255.0f);
 	}
 	
 	public void render()
 	{
+		NVGColor color = NVGColor.create();
+		color.r(this.color.x);
+		color.g(this.color.y);
+		color.b(this.color.z);
+		color.a(this.color.w);
 		NanoVG.nvgBeginPath(Main.vg);
 		NanoVG.nvgFontSize(Main.vg, fontSize);
 		NanoVG.nvgFontFace(Main.vg, fontName);
@@ -105,7 +111,7 @@ public class Text implements Serializable
 		this.text = text;
 		this.x = x;
 		this.y = y;
-		color = NVGColor.create();
+		color = new Vector4f();
 		setColor(0, 0, 0, 255.0f);
 		fontName = "Consolas";
 		fontSize = 20.0f;

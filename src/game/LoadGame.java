@@ -31,45 +31,45 @@ public class LoadGame
 			Nation player = null;
 			f = new FileInputStream(filename + "player.save");
 			o = new ObjectInputStream(f);
-			/*try 
+			try
 			{
 				player = (Nation)o.readObject();
 			} catch (ClassNotFoundException e) 
 			{
 				System.err.println(e);
-			}*/
+			}
 			o.close();
 			f.close();
 			//load calendar
 			Calendar date = null;
 			f = new FileInputStream(filename + "calendar.save");
 			o = new ObjectInputStream(f);
-			/*try 
+			try
 			{
 				date = (Calendar)o.readObject();
 			} catch (ClassNotFoundException e) 
 			{
 				System.err.println(e);
-			}*/
+			}
 			o.close();
 			f.close();
 			//load market
 			Market market = null;
 			f = new FileInputStream(filename + "market.save");
 			o = new ObjectInputStream(f);
-			/*try 
+			try 
 			{
 				market = (Market)o.readObject();
 			} catch (ClassNotFoundException e) 
 			{
 				System.err.println(e);
-			}*/
+			}
 			o.close();
 			f.close();
 			//load game
-			//Level.date = date;
-			//Level.player = player;
-			//World.market = market;
+			Level.date = date;
+			Level.player = player;
+			World.market = market;
 			Main.level = level;
 			Main.hud = new HUD();
 			level.load();

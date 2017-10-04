@@ -3,11 +3,6 @@ package game;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.joml.Vector3f;
-import org.joml.Vector4f;
-
-import graphics.Border;
 import graphics.Model;
 import graphics.Renderer;
 import graphics.Sprite;
@@ -27,7 +22,6 @@ public class Tile implements Serializable
 	private String resourceType;
 	private String terrainType;
 	private Nation owner;
-	private transient Border borderNorth, borderWest, borderSouth, borderEast;
 	public Tile north, west, south, east;
 	private float x, y;
 	private float populationGrowth;
@@ -37,12 +31,7 @@ public class Tile implements Serializable
 	
 	private void updateBorder()
 	{
-		if(north != null && north.getOwner() != owner && borderNorth == null)
-		{
-			Vector3f pos1 = new Vector3f(x, y, 0);
-			Vector3f pos2 = new Vector3f(x + 2.0f, y + 2.0f, 0);
-			borderNorth = new Border(pos1, pos2, new Vector4f(owner.getColor(), 1.0f));
-		}
+		
 	}
 	
 	public List<Population> getPops()
@@ -57,12 +46,40 @@ public class Tile implements Serializable
 	
 	public void buildWoodcutter()
 	{
-		
+		if(this.getResourceType() == "Wood" && owner.getStockpile("Wood") >= 0.01f && owner.getMoney() >= 0.01f)
+		{
+			owner.changeStockpile("Wood", -0.01f);
+			owner.changeMoney(0.01f);
+		}
+		else
+			return;
+		float money = 0.01f;
+		float pay = 0.001f;
+		int baseWorkspace = 10;
+		float baseProduction = 1.0f;
+		float[] resourceOutputAmount = new float[]
+				{
+						0.01f
+				};
+		String[] resourceOutput = new String[]
+				{
+					"Wood"	
+				};
+		float[] resourceInputAmount = new float[]
+				{
+			
+				};
+		String[] resourceInput = new String[]
+				{
+						
+				};
+		factories.add(new Factory(this, resourceInput, resourceInputAmount, resourceOutput, 
+				resourceOutputAmount, baseProduction, baseWorkspace, pay, money, "Woodcutter"));
 	}
 	
 	public void buildFarm()
 	{
-		if(owner.getStockpile("Wood") >= 0.01f && owner.getMoney() >= 0.01f)
+		if(this.getResourceType() == "Food" && owner.getStockpile("Wood") >= 0.01f && owner.getMoney() >= 0.01f)
 		{
 			owner.changeStockpile("Wood", -0.01f);
 			owner.changeMoney(-0.01f);
@@ -70,8 +87,8 @@ public class Tile implements Serializable
 		else
 			return;
 		float money = 0.01f;
-		float pay = 0.00001f;
-		int baseWorkspace = 1000;
+		float pay = 0.001f;
+		int baseWorkspace = 10;
 		float baseProduction = 1.0f;
 		float[] resourceOutputAmount = new float[]
 				{
@@ -235,19 +252,18 @@ public class Tile implements Serializable
 	
 	public void initGraphics()
 	{
-		if(terrainType == "Plain")
+		if(terrainType.compareTo("Plain") == 0)
 		{
 			sprite = new Sprite(new Texture("/images/sprTerrainPlain.png"));
 		}
-		else if(terrainType == "Desert")
+		else if(terrainType.compareTo("Desert") == 0)
 		{
 			sprite = new Sprite(new Texture("/images/sprTerrainDesert.png"));
 		}
-		else if(terrainType == "Water")
+		else if(terrainType.compareTo("Water") == 0)
 		{
 			sprite = new Sprite(new Texture("/images/sprTerrainWater.png"));
 		}
-		
 		sprite.getModel().setX(this.x);
 		sprite.getModel().setY(this.y);
 	}
@@ -276,8 +292,6 @@ public class Tile implements Serializable
 	public void render()
 	{
 		Renderer.provinces.add(this);
-		if(borderNorth != null)
-			Renderer.models.add(borderNorth.getModel());
 	}
 	
 	public void updateOnHour()
