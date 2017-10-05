@@ -21,7 +21,7 @@ public class Level implements Serializable
 	private static final long serialVersionUID = -1115634716574780107L;
 	private World world;
 	private List<Nation> nations;
-	public static Nation player;
+	public Nation player;
 	public static Calendar date;
 	private MouseBoxSelection mouseBoxSelection;
 	public static Tile selectedTile;
@@ -123,7 +123,7 @@ public class Level implements Serializable
 	public Level(Nation nation, int worldWidth, int worldHeight)
 	{
 		mouseBoxSelection = new MouseBoxSelection();
-		Level.player = nation;
+		player = nation;
 		world = new World(worldWidth, worldHeight);
 		selectedTile = null;
 		date = new Calendar(0, 1, 0, 0);

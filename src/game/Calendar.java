@@ -24,6 +24,11 @@ public class Calendar implements Serializable
 	private String time;
 	private long lastFrame;
 	
+	public void reset()
+	{
+		lastFrame = Main.frame;
+	}
+	
 	public boolean getPause()
 	{
 		return pause;
@@ -120,8 +125,12 @@ public class Calendar implements Serializable
 	public void update()
 	{
 		if(Keyboard.getKeyReleased(Settings.keyPauseGame))
+		{
 			if(!HUD.menuOpen)
+			{
 				pause = !pause;
+			}
+		}
 		if(pause)
 		{
 			lastFrame++;

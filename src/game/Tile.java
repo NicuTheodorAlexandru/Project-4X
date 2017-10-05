@@ -196,8 +196,9 @@ public class Tile implements Serializable
 	
 	private void popGrowth()
 	{
-		for(Population pop: pops)
+		for(int i = 0; i < pops.size(); i++)
 		{
+			Population pop = pops.get(i);
 			double temp = pop.getAmount() * populationGrowth / 720;//720;
 			changePopulation(new Population(pop.getCulture(), pop.getReligion(), "Unemployed", temp));
 		}
@@ -321,6 +322,8 @@ public class Tile implements Serializable
 	
 	public void update()
 	{
+		if(owner != null)
+			System.out.println(owner);
 		if(sprite.getModel().getSelected() && Level.selectedTile != this)
 			Level.selectedTile = this;
 	}

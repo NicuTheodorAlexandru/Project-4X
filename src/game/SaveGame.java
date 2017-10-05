@@ -26,8 +26,6 @@ public class SaveGame
 			File ff;
 			ff = new File("src/saves/" + filename + "/level.save");
 			ff.createNewFile();
-			ff = new File("src/saves/" + filename + "/player.save");
-			ff.createNewFile();
 			ff = new File("src/saves/" + filename + "/calendar.save");
 			ff.createNewFile();
 			ff = new File("src/saves/" + filename + "/market.save");
@@ -36,13 +34,6 @@ public class SaveGame
 			FileOutputStream f = new FileOutputStream("src/saves/" + filename + "/" + "level.save");
 			ObjectOutputStream o = new ObjectOutputStream(f);
 			o.writeObject(Main.level);
-			o.flush();
-			o.close();
-			f.close();
-			//save player
-			f = new FileOutputStream("src/saves/" + filename + "/" + "player.save");
-			o = new ObjectOutputStream(f);
-			o.writeObject(Level.player);
 			o.flush();
 			o.close();
 			f.close();

@@ -152,27 +152,27 @@ public class HUD
 		if(resources == null)
 		{
 			String tmp  = "";
-			tmp += "Population: " + String.valueOf(Level.player.getPopulation() + " ");
-			tmp += "Food: " + String.format("%.3f", Level.player.getStockpile("Food")) + "t ";
-			tmp += "Wood: " + String.format("%.3f", Level.player.getStockpile("Wood")) + "t ";
+			tmp += "Population: " + String.valueOf(Main.level.player.getPopulation() + " ");
+			tmp += "Food: " + String.format("%.3f", Main.level.player.getStockpile("Food")) + "t ";
+			tmp += "Wood: " + String.format("%.3f", Main.level.player.getStockpile("Wood")) + "t ";
 			resources = new Text(100.0f, 0.0f, tmp);
 		}
 		else
 		{
 			String tmp  = "";
-			tmp += "Population: " + String.valueOf(Level.player.getPopulation()) + " ";
-			tmp += "Food: " + String.format("%.3f", Level.player.getStockpile("Food")) + "t ";
-			tmp += "Wood: " + String.format("%.3f", Level.player.getStockpile("Wood")) + "t ";
+			tmp += "Population: " + String.valueOf(Main.level.player.getPopulation()) + " ";
+			tmp += "Food: " + String.format("%.3f", Main.level.player.getStockpile("Food")) + "t ";
+			tmp += "Wood: " + String.format("%.3f", Main.level.player.getStockpile("Wood")) + "t ";
 			resources.setText(tmp);
 		}
 		if(money == null)
 		{
-			String m = "" + String.format("%.2f", Level.player.getMoney()) + "$";
+			String m = "" + String.format("%.2f", Main.level.player.getMoney()) + "$";
 			money = new Text(0.0f, 0.0f, m);
 		}
 		else
 		{
-			String m = "" + String.format("%.2f", Level.player.getMoney()) + "$";
+			String m = "" + String.format("%.2f", Main.level.player.getMoney()) + "$";
 			money.setText(m);
 		}
 		if(provinceResource != null)
@@ -214,7 +214,7 @@ public class HUD
 				colonizeButton.update();
 				if(colonizeButton.getActivated())
 				{
-					Level.selectedTile.colonize(Level.player);
+					Level.selectedTile.colonize(Main.level.player);
 					colonizeButton = null;
 				}
 			}
@@ -250,5 +250,6 @@ public class HUD
 	public HUD()
 	{
 		resourceList = new guiResourceList(200, 200, 200, 200);
+		pauseState = Level.date.getPause();
 	}
 }

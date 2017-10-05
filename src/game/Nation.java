@@ -19,8 +19,14 @@ public class Nation implements Serializable
 	private String religion;
 	private HashMap<String, Double> stockpile;
 	private HashMap<String, Double> storage;
+	private long tag;
 	private double money;
 	private int population;
+	
+	public long getTag()
+	{
+		return tag;
+	}
 	
 	public String getReligion()
 	{

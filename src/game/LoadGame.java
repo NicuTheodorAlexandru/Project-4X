@@ -27,19 +27,6 @@ public class LoadGame
 			}
 			o.close();
 			f.close();
-			//load player
-			Nation player = null;
-			f = new FileInputStream(filename + "player.save");
-			o = new ObjectInputStream(f);
-			try
-			{
-				player = (Nation)o.readObject();
-			} catch (ClassNotFoundException e) 
-			{
-				System.err.println(e);
-			}
-			o.close();
-			f.close();
 			//load calendar
 			Calendar date = null;
 			f = new FileInputStream(filename + "calendar.save");
@@ -68,7 +55,7 @@ public class LoadGame
 			f.close();
 			//load game
 			Level.date = date;
-			Level.player = player;
+			date.reset();
 			World.market = market;
 			Main.level = level;
 			Main.hud = new HUD();

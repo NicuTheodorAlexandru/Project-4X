@@ -2,12 +2,11 @@ package gui;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import game.Level;
 import game.World;
 import graphics.HUD;
 import graphics.Text;
 import input.Keyboard;
+import main.Main;
 import misc.Defines;
 import misc.Settings;
 import misc.Utils;
@@ -31,7 +30,7 @@ public class guiResourceList extends guiList
 			float a = x;
 			float b = y + 40 * i;
 			
-			texts.add(new Text(a, b, Defines.resourceTypes[i] + ": " + String.format("%.3f", Level.player.getStockpile(Defines.resourceTypes[i]))));
+			texts.add(new Text(a, b, Defines.resourceTypes[i] + ": " + String.format("%.3f", Main.level.player.getStockpile(Defines.resourceTypes[i]))));
 			buttons.add(new guiButton(a + 130, b, new guiSprite(Utils.getNanoVGImage("/images/sprPlus.png", 16 * 1024))));
 			buttons.add(new guiButton(a + 130, b + 20, new guiSprite(Utils.getNanoVGImage("/images/sprMinus.png", 16 * 1024))));
 		}
@@ -78,21 +77,21 @@ public class guiResourceList extends guiList
 		s = scroll - s;
 		for(int i = 0, j = 0; i < Defines.resourceTypes.length; i++, j += 2)
 		{
-			texts.get(i).setText(Defines.resourceTypes[i] + ": " + String.format("%.3f", Level.player.getStockpile(Defines.resourceTypes[i])));
+			texts.get(i).setText(Defines.resourceTypes[i] + ": " + String.format("%.3f", Main.level.player.getStockpile(Defines.resourceTypes[i])));
 			texts.get(i).changeY(s);
 			buttons.get(j).changeY(s);
 			if(buttons.get(j).getY() >= y && buttons.get(j).getY() <= y + width)
 			{
 				buttons.get(j).update();
 				if(buttons.get(j).getPressed())
-					World.market.buyResource(Level.player, Defines.resourceTypes[i], amount);
+					World.market.buyResource(Main.level.player, Defines.resourceTypes[i], amount);
 			}
 			buttons.get(j + 1).changeY(s);
 			if(buttons.get(j + 1).getY() >= y && buttons.get(j + 1).getY() <=  y + width)
 			{
 				buttons.get(j + 1).update();
 				if(buttons.get(j + 1).getPressed())
-					World.market.sellResource(Level.player, Defines.resourceTypes[i], amount);
+					World.market.sellResource(Main.level.player, Defines.resourceTypes[i], amount);
 			}
 		}
 	}
