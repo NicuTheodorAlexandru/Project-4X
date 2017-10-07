@@ -64,6 +64,8 @@ public class Factory implements Serializable
 		int amount = (int)(money / pay);
 		if(amount > baseWorkspace - workers)
 			amount = baseWorkspace - workers;
+		if(amount <= 0)
+			return;
 		for(int i = 0; i < tile.getPops().size(); i++)
 		{
 			Population p = tile.getPops().get(i);

@@ -13,7 +13,8 @@ void main()
 {
 	if(owned == 1)
 	{
-		fragColor = color * texture(textureSampler, outTexCoord);	
+		fragColor = texture(textureSampler, outTexCoord);	
+		fragColor = color;
 	}
 	else
 	{

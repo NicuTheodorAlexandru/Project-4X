@@ -28,6 +28,17 @@ public class Tile implements Serializable
 	private float resourceOutput;
 	private float productionPerPop;
 	private float foodPerPop;
+	private int numberOfFarms, numberOfWoodcutters;
+	
+	public int getNumberWoodcutter()
+	{
+		return numberOfWoodcutters;
+	}
+	
+	public int getNumberOfFarms()
+	{
+		return numberOfFarms;
+	}
 	
 	private void updateBorder()
 	{
@@ -53,6 +64,7 @@ public class Tile implements Serializable
 		}
 		else
 			return;
+		numberOfWoodcutters++;
 		float money = 0.01f;
 		float pay = 0.001f;
 		int baseWorkspace = 10;
@@ -86,6 +98,7 @@ public class Tile implements Serializable
 		}
 		else
 			return;
+		numberOfFarms++;
 		float money = 0.01f;
 		float pay = 0.001f;
 		int baseWorkspace = 10;
@@ -271,6 +284,7 @@ public class Tile implements Serializable
 	
 	public Tile(float x, float y)
 	{
+		numberOfFarms = numberOfWoodcutters = 0;
 		factories = new ArrayList<>();
 		resourceOutput = 0.0f;
 		populationGrowth = 1f;
@@ -322,8 +336,6 @@ public class Tile implements Serializable
 	
 	public void update()
 	{
-		if(owner != null)
-			System.out.println(owner);
 		if(sprite.getModel().getSelected() && Level.selectedTile != this)
 			Level.selectedTile = this;
 	}

@@ -2,6 +2,7 @@ package graphics;
 
 import game.Level;
 import game.SaveGame;
+import gui.guiBuildMenu;
 import gui.guiButton;
 import gui.guiResourceList;
 import gui.guiSprite;
@@ -17,13 +18,13 @@ public class HUD
 	public static boolean buttonClicked = false;
 	private boolean pauseState;
 	private guiResourceList resourceList;
+	private guiBuildMenu buildMenu;
 	private guiButton colonizeButton;
 	private guiButton exitGameButton;
 	private guiButton resumeGameButton;
 	private guiButton saveGameButton;
 	private guiButton buildFactoryButton;
 	private Text provincePopulation;
-	private Text numberOfFactories;
 	private Text provinceResource;
 	private Text money;
 	private Text resources;
@@ -52,7 +53,6 @@ public class HUD
 					provincePopulation = new Text(0.0f, Main.window.getWindowHeight() - 20.0f, p);
 					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 80.0f, 
 							new guiSprite(Assets.imgBuild));
-					numberOfFactories = new Text(0.0f, Main.window.getWindowHeight() - 60.0f, "");
 				}
 			}
 		}
@@ -62,24 +62,9 @@ public class HUD
 	{
 		buttonClicked = false;
 		resourceList.update();
-		if(numberOfFactories != null)
+		if(buildMenu != null)
 		{
-			if(Level.selectedTile != null && Level.selectedTile.getOwner() != null)
-			{
-				if(Keyboard.getKeyReleased(Settings.keyExit))
-				{
-					interfaceOpen = false;
-					numberOfFactories = null;
-				}
-				else
-				{
-					numberOfFactories.setText(String.valueOf(Level.selectedTile.getNumberOfFactories()));
-				}
-			}
-			else
-			{
-				numberOfFactories = null;
-			}
+			buildMenu.update();
 		}
 		if(buildFactoryButton != null)
 		{
@@ -89,19 +74,28 @@ public class HUD
 				{
 					interfaceOpen = false;
 					buildFactoryButton = null;
+					buildMenu = null;
 				}
 				else
 				{
 					buildFactoryButton.update();
 					if(buildFactoryButton.getActivated())
 					{
-						Level.selectedTile.buildFarm();
+						if(buildMenu != null)
+						{
+							buildMenu = null;
+						}
+						else
+						{
+							buildMenu = new guiBuildMenu(0, Main.window.getWindowHeight() - 300, 200, 200);
+						}
 					}
 				}
 			}
 			else
 			{
 				buildFactoryButton = null;
+				buildMenu = null;
 			}
 		}
 		if(menuOpen)
@@ -130,6 +124,7 @@ public class HUD
 				if(resumeGameButton.getActivated())
 				{
 					exitGameButton = null;
+					saveGameButton = null;
 					resumeGameButton = null;
 					pauseState = Level.date.getPause();
 					Level.date.unpause();
@@ -197,7 +192,7 @@ public class HUD
 			else
 			{
 				float pop = (int)Level.selectedTile.getPopulation();
-				String p = "" + pop;
+				String p = "" + (int)pop;
 				provincePopulation.setText(p);
 			}
 		}
@@ -225,8 +220,8 @@ public class HUD
 	public void render()
 	{
 		resourceList.render();
-		if(numberOfFactories != null)
-			numberOfFactories.render();
+		if(buildMenu != null)
+			buildMenu.render();
 		if(buildFactoryButton != null)
 			buildFactoryButton.render();
 		if(saveGameButton != null)

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import misc.Defines;
 
@@ -87,9 +88,9 @@ public class Nation implements Serializable
 		return name;
 	}
 	
-	public Vector3f getColor()
+	public Vector4f getColor()
 	{
-		return color;
+		return new Vector4f(color, 1.0f);
 	}
 	
 	public Nation(String name, String culture, String religion, Vector3f color)

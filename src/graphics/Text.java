@@ -83,11 +83,21 @@ public class Text implements Serializable
 	public void render()
 	{
 		NVGColor color = NVGColor.create();
+
+		NanoVG.nvgBeginPath(Main.vg);
+		//render background
+		color.r(1.0f);
+		color.g(1.0f);
+		color.b(1.0f);
+		color.a(1.0f);
+		NanoVG.nvgRect(Main.vg, x, y, width, height);
+		NanoVG.nvgFillColor(Main.vg, color);
+		NanoVG.nvgFill(Main.vg);
+		//render text
 		color.r(this.color.x);
 		color.g(this.color.y);
 		color.b(this.color.z);
 		color.a(this.color.w);
-		NanoVG.nvgBeginPath(Main.vg);
 		NanoVG.nvgFontSize(Main.vg, fontSize);
 		NanoVG.nvgFontFace(Main.vg, fontName);
 		NanoVG.nvgTextAlign(Main.vg, NanoVG.NVG_ALIGN_LEFT);

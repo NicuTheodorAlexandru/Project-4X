@@ -8,10 +8,22 @@ public class guiList
 {
 	protected float x, y;
 	protected float width, height;
+	protected float maxHeight;
+	protected float curHeight;
 	protected float scroll;
 	protected float scrollSpeed;
 	private float exY;
 	private guiButton scrollButton;
+	
+	public float getCurrentHeight()
+	{
+		return curHeight;
+	}
+	
+	public float getHeight()
+	{
+		return height;
+	}
 	
 	private void follow()
 	{
@@ -23,9 +35,11 @@ public class guiList
 		if(scrollButton.getActivated())
 		{
 			follow();
+			if(scrollButton.getY() + scrollButton.getHeight() >= y + height)
+				scrollButton.setY(y + height - scrollButton.getHeight());
+			scroll += (scrollButton.getY() - exY) * (curHeight / height);
+			exY = (float)scrollButton.getY();
 		}
-		scroll += scrollButton.getY() - exY;
-		exY = (float)scrollButton.getY();
 	}
 	
 	public void update()
@@ -44,7 +58,7 @@ public class guiList
 	
 	public guiList(float x, float y, float width, float height)
 	{
-		scrollButton = new guiButton(x + width, y, "S" + System.lineSeparator() + "C");
+		scrollButton = new guiButton(x + width, y, 20, this);
 		
 		scroll = 0.0f;
 		scrollSpeed = 0.1f;
@@ -54,5 +68,6 @@ public class guiList
 		this.y = y;
 		this.width = width;
 		this.height = height;
+		maxHeight = 0.0f;
 	}
 }

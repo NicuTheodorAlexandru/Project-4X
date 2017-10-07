@@ -34,6 +34,10 @@ public class guiResourceList extends guiList
 			buttons.add(new guiButton(a + 130, b, new guiSprite(Utils.getNanoVGImage("/images/sprPlus.png", 16 * 1024))));
 			buttons.add(new guiButton(a + 130, b + 20, new guiSprite(Utils.getNanoVGImage("/images/sprMinus.png", 16 * 1024))));
 		}
+		for(int i = 0; i < texts.size(); i++)
+			maxHeight = Math.max(maxHeight, texts.get(i).getY() - y + texts.get(i).getHeight());
+		for(int i = 0; i < buttons.size(); i++)
+			maxHeight = (float)Math.max(maxHeight, buttons.get(i).getY() - y + buttons.get(i).getHeight());
 	}
 	
 	public void render()

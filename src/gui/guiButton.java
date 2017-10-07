@@ -14,10 +14,22 @@ public class guiButton
 	private float y;
 	private float width;
 	private float height;
+	private float maxHeight, curHeight;
 	private guiSprite sprite;
+	private guiList list;
 	private Text text;
 	private boolean activated;
 	private boolean pressed;
+	
+	public void setText(String text)
+	{
+		this.text.setText(text);
+	}
+	
+	public float getHeight()
+	{
+		return height;
+	}
 	
 	public boolean getPressed()
 	{
@@ -100,10 +112,40 @@ public class guiButton
 			NanoVG.nvgFill(Main.vg);
 			text.render();
 		}
-		else
+		else if(sprite != null)
 		{
 			sprite.render();
 		}
+		else if(list != null)
+		{
+			curHeight = list.getHeight();
+			maxHeight = list.getCurrentHeight();
+			float ratio = maxHeight / curHeight;
+			height = curHeight / ratio;
+			if(height > curHeight)
+				height = curHeight;
+			NanoVG.nvgBeginPath(Main.vg);
+			NVGColor color = NVGColor.create();
+			color.a(1.0f);
+			color.b(0.0f);
+			color.r(0.0f);
+			color.g(0.0f);
+			NanoVG.nvgRect(Main.vg, x, y, width, height);
+			NanoVG.nvgFillColor(Main.vg, color);
+			NanoVG.nvgFill(Main.vg);
+		}
+	}
+	
+	public guiButton(float x, float y, float width, guiList list)
+	{
+		pressed = activated = false;
+		this.x = x;
+		this.y = y;
+		this.width = width;
+		height = 0;
+		this.curHeight = list.getHeight();
+		this.maxHeight = list.getCurrentHeight();
+		this.list = list;
 	}
 	
 	public guiButton(float x, float y, guiSprite sprite)
