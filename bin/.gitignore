@@ -1,9 +1,6 @@
-/images/
-/game/
 /graphics/
-/main/
-/misc/
-/menu/
-/saves/
 /gui/
-/shaders/
+/input/
+/main/
+/menu/
+/misc/
