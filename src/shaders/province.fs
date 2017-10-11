@@ -13,7 +13,7 @@ void main()
 {
 	if(owned == 1)
 	{
-		fragColor = texture(textureSampler, outTexCoord);	
+		fragColor = texture(textureSampler, outTexCoord);
 		fragColor = color;
 	}
 	else
@@ -22,6 +22,6 @@ void main()
 	}
 	if(selected == 1)
 	{
-		fragColor = vec4(fragColor.x, fragColor.y, fragColor.z, 0.1);
+		fragColor = vec4(fragColor.x, fragColor.y, fragColor.z, 0.9);
 	}
 }

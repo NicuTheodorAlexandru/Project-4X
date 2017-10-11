@@ -23,6 +23,16 @@ public class Text implements Serializable
 	private float width;
 	private float height;
 	
+	public void setY(float y)
+	{
+		this.y = y;
+	}
+	
+	public void setX(float x)
+	{
+		this.x = x;
+	}
+	
 	public float getY()
 	{
 		return y;
@@ -109,6 +119,7 @@ public class Text implements Serializable
 	public void setText(String text)
 	{
 		this.text = text;
+		getTextSize();
 	}
 	
 	public String getText()

@@ -16,21 +16,38 @@ public class Sprite
 	
 	public void createSprite()
 	{
-		float widthRatio = texture.getWidth() / 32.0f;
-		float heightRatio = texture.getHeight() / 32.0f;
-		float[] vertices = 
+		float[] positions = 
 			{
-					-base * widthRatio, -base * heightRatio, 0f,
-		            base * widthRatio, -base * heightRatio, 0f, 
-		            base * widthRatio, base * heightRatio, 0f, 
-		            -base * widthRatio, base * heightRatio, 0f,
+					-base, -base, 0.0f,
+		            base, -base, 0.0f, 
+		            base, base, 0.0f, 
+		            -base, base, 0.0f,
+			};
+		float[] texCoords = 
+			{
+					0.0f, 0.0f, 0.0f,
+					base, 0.0f, 0.0f,
+					base, base, 0.0f,
+					0.0f, base, 0.0f,
+			};
+		float[] normals = 
+			{
+				0.0f, 0.0f, base,
+				0.0f, 0.0f, base,
+				0.0f, 0.0f, base,
+				0.0f, 0.0f, base,
+			};
+		int[] indices = 
+			{
+				1, 2, 3,
+				1, 3, 4,
 			};
 		if(Defines.tileWidth <= 0)
 		{
-			Defines.tileWidth = base * widthRatio * 2;
-			Defines.tileHeight = base * heightRatio * 2;
+			Defines.tileWidth = base * 2;
+			Defines.tileHeight = base * 2;
 		}
-		model = new Model(OBJLoader.loadSpriteMesh("/models/square.obj", vertices));
+		model = new Model(new Mesh(positions, texCoords, normals, indices));
 		model.getMesh().setTexture(texture);
 	}
 	
@@ -47,7 +64,7 @@ public class Sprite
 	public Sprite(Texture tex)
 	{
 		texture = tex;
-		model = new Model(OBJLoader.loadMesh("/models/cube.obj"));
+		model = new Model(OBJLoader.loadMesh("/models/square.obj"));
 		model.getMesh().setTexture(texture);
 		//createSprite();
 	}

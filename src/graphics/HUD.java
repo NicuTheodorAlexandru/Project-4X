@@ -6,6 +6,7 @@ import gui.guiBuildMenu;
 import gui.guiButton;
 import gui.guiResourceList;
 import gui.guiSprite;
+import gui.guiTooltip;
 import input.Keyboard;
 import main.Main;
 import misc.Assets;
@@ -24,10 +25,13 @@ public class HUD
 	private guiButton resumeGameButton;
 	private guiButton saveGameButton;
 	private guiButton buildFactoryButton;
+	private guiTooltip profit;
 	private Text provincePopulation;
 	private Text provinceResource;
 	private Text money;
 	private Text resources;
+	private float exMoney;
+	private float exexMoney;
 	
 	private void provinceInfo()
 	{
@@ -55,6 +59,26 @@ public class HUD
 							new guiSprite(Assets.imgBuild));
 				}
 			}
+		}
+	}
+	
+	public void updateOnDay()
+	{
+		if(profit != null)
+		{
+			exexMoney = exMoney;
+			exMoney = (float)Main.level.getPlayerNation().getMoney();
+		}
+	}
+	
+	public void updateOnHour()
+	{
+		if(profit != null)
+		{
+			float change = exexMoney - exMoney;
+			profit.setText(String.format("%.2f", change));
+			profit.width = money.getWidth();
+			profit.height = money.getHeight();
 		}
 	}
 	
@@ -137,8 +161,8 @@ public class HUD
 			if(Keyboard.getKeyReleased(Settings.keyExit) && !interfaceOpen)
 			{
 				exitGameButton = new guiButton(500.f, 300.f, "Exit game");
-				resumeGameButton = new guiButton(500.f, 260.f, "Resume game");
-				saveGameButton = new guiButton(500.f, 280.f, "Save game");
+				resumeGameButton = new guiButton(500.f, 270.f, "Resume game");
+				saveGameButton = new guiButton(500.f, 240.f, "Save game");
 				pauseState = Level.date.getPause();
 				Level.date.pause();
 				menuOpen = true;
@@ -169,6 +193,20 @@ public class HUD
 		{
 			String m = "" + String.format("%.2f", Main.level.player.getMoney()) + "$";
 			money.setText(m);
+		}
+		if(profit == null)
+		{
+			exMoney = (float)Main.level.getPlayerNation().getMoney();
+			exexMoney = (float)Main.level.getPlayerNation().getMoney();
+			float change = exexMoney - exMoney;
+			profit = new guiTooltip(String.format("%.2f", change));
+			profit.x = profit.y = 0.0f;
+			profit.width = money.getWidth();
+			profit.height = money.getHeight();
+		}
+		else
+		{
+			profit.update();
 		}
 		if(provinceResource != null)
 		{
@@ -240,6 +278,9 @@ public class HUD
 			colonizeButton.render();
 		if(provincePopulation != null)
 			provincePopulation.render();
+		
+		if(profit != null)
+			profit.render();
 	}
 	
 	public HUD()

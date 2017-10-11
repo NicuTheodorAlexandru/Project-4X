@@ -58,11 +58,13 @@ public class Level implements Serializable
 	public void updateOnDay()
 	{
 		world.updateOnDay();
+		Main.hud.updateOnDay();
 	}
 	
 	public void updateOnHour()
 	{
 		world.updateOnHour();
+		Main.hud.updateOnHour();
 	}
 	
 	private void updateSpeed()

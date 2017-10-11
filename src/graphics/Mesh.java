@@ -129,10 +129,37 @@ public class Mesh
 		return vertexCount;
 	}
 	
+	private void size(float[] positions)
+	{
+		minPos.x = minPos.y = minPos.z = Float.POSITIVE_INFINITY;
+		maxPos.x = maxPos.y = maxPos.z = Float.NEGATIVE_INFINITY;
+		
+		for(int i = 0; i < positions.length; i += 3)
+		{
+			float x = positions[i];
+			float y = positions[i + 1];
+			float z = positions[i + 2];
+			
+			if(x > maxPos.x)
+				maxPos.x = x;
+			if(x < minPos.x)
+				minPos.x = x;
+			if(y > maxPos.y)
+				maxPos.y = y;
+			if(y < minPos.y)
+				minPos.y = y;
+			if(z > maxPos.z)
+				maxPos.z = z;
+			if(z < minPos.z)
+				minPos.z = z;
+		}
+	}
+	
 	public Mesh(float[] positions, float[] texCoords, float[] normals, int[] indices)
 	{
 		minPos = new Vector3f();
 		maxPos = new Vector3f();
+		size(positions);
 		sprite = null;
 		color = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 		

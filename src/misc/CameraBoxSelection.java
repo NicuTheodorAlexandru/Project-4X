@@ -39,8 +39,10 @@ public class CameraBoxSelection implements Serializable
 			min.set(model.getPosition());
 			max.set(model.getPosition());
 			//
-			min.add(-model.getScale(), -model.getScale(), -model.getScale());
-			max.add(model.getScale(), model.getScale(), model.getScale());
+			min.add(-model.getScale().x / 2, -model.getScale().y / 2, -model.getScale().z / 2);
+			max.add(model.getScale().x / 2, model.getScale().y / 2, model.getScale().z / 2);
+			if(max.z == 0)
+				max.z = 0.01f;
 			if(Intersectionf.intersectRayAab(center, dir, min, max, nearFar) 
 					&& nearFar.x < closestDistance)
 			{
