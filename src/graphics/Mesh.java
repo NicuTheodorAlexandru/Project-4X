@@ -163,6 +163,11 @@ public class Mesh
 		sprite = null;
 		color = new Vector4f(1.0f, 1.0f, 1.0f, 1.0f);
 		
+		for(int i = 0; i < indices.length; i += 3)
+		{
+			System.out.println(indices[i] + "; " + indices[i + 1] + "; " + indices[i + 2]);
+		}
+		
 		FloatBuffer positionBuffer = null;
 		FloatBuffer texCoordsBuffer = null;
 		FloatBuffer normalBuffer = null;

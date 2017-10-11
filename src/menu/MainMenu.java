@@ -29,7 +29,7 @@ public class MainMenu
 		if(startNewGame.getActivated())
 		{
 			Level level = new Level(new Nation("Prussia", "Prussian", "Protestant", 
-					new Vector3f(0.0f, 0.192f, 0.325f)), 5, 5);
+					new Vector3f(0.0f, 0.192f, 0.325f)), 1, 1);
 			Main.level = level;
 			Main.hud = new HUD();
 		}
