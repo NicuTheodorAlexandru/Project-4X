@@ -1,9 +1,14 @@
 package game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
-public class Factory
+public class Factory implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6972056149906269828L;
 	private HashMap<String, Double> stockpile;
 	private Tile tile;
 	private float baseProduction;
@@ -59,6 +64,8 @@ public class Factory
 		int amount = (int)(money / pay);
 		if(amount > baseWorkspace - workers)
 			amount = baseWorkspace - workers;
+		if(amount <= 0)
+			return;
 		for(int i = 0; i < tile.getPops().size(); i++)
 		{
 			Population p = tile.getPops().get(i);

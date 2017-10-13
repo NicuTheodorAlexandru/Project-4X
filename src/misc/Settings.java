@@ -5,6 +5,7 @@ import org.lwjgl.glfw.GLFW;
 public class Settings
 {
 	//keys
+	public static int keyOpenResourceList = GLFW.GLFW_KEY_E;
 	public static int keyMoveCameraUp = GLFW.GLFW_KEY_W;
 	public static int keyMoveCameraDown = GLFW.GLFW_KEY_S;
 	public static int keyMoveCameraLeft = GLFW.GLFW_KEY_A;
@@ -15,6 +16,8 @@ public class Settings
 	public static int keyFasterSpeed = GLFW.GLFW_KEY_KP_ADD;
 	public static int keySlowerSpeed = GLFW.GLFW_KEY_KP_SUBTRACT;
 	public static int keyPauseGame = GLFW.GLFW_KEY_SPACE;
+	public static int keyScrollUp = GLFW.GLFW_KEY_UP;
+	public static int keyScrollDown = GLFW.GLFW_KEY_DOWN;
 	//settings
 	//window settings
 	public static boolean borderless = true;

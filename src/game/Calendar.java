@@ -1,13 +1,19 @@
 package game;
 
+import java.io.Serializable;
+
 import graphics.HUD;
 import graphics.Text;
 import input.Keyboard;
 import main.Main;
 import misc.Settings;
 
-public class Calendar
+public class Calendar implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9082715702808406330L;
 	private boolean pause;
 	private String[] months;
 	private int hour;
@@ -17,6 +23,11 @@ public class Calendar
 	private Text date;
 	private String time;
 	private long lastFrame;
+	
+	public void reset()
+	{
+		lastFrame = Main.frame;
+	}
 	
 	public boolean getPause()
 	{
@@ -114,8 +125,12 @@ public class Calendar
 	public void update()
 	{
 		if(Keyboard.getKeyReleased(Settings.keyPauseGame))
+		{
 			if(!HUD.menuOpen)
+			{
 				pause = !pause;
+			}
+		}
 		if(pause)
 		{
 			lastFrame++;
@@ -155,6 +170,6 @@ public class Calendar
 		this.day = day;
 		this.month = month;
 		this.year = year;
-		date = new Text(Main.window.getWindowWidth() - 250.0f, 20.0f, time);
+		date = new Text(Main.window.getWindowWidth() - 250.0f, 0.0f, time);
 	}
 }

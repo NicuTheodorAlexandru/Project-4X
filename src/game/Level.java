@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -12,17 +13,26 @@ import main.Main;
 import misc.MouseBoxSelection;
 import misc.Settings;
 
-public class Level
+public class Level implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1115634716574780107L;
 	private World world;
 	private List<Nation> nations;
-	public static Nation player;
+	public Nation player;
 	public static Calendar date;
 	private MouseBoxSelection mouseBoxSelection;
 	public static Tile selectedTile;
 	public static int FRAMES_PER_HOUR = 10;
 	public static int HOURS_PER_FRAME = 1;
 	private int hour, day;
+	
+	public void load()
+	{
+		world.load();
+	}
 	
 	public List<Nation>getNationsList()
 	{
@@ -48,11 +58,13 @@ public class Level
 	public void updateOnDay()
 	{
 		world.updateOnDay();
+		Main.hud.updateOnDay();
 	}
 	
 	public void updateOnHour()
 	{
 		world.updateOnHour();
+		Main.hud.updateOnHour();
 	}
 	
 	private void updateSpeed()
@@ -113,7 +125,7 @@ public class Level
 	public Level(Nation nation, int worldWidth, int worldHeight)
 	{
 		mouseBoxSelection = new MouseBoxSelection();
-		Level.player = nation;
+		player = nation;
 		world = new World(worldWidth, worldHeight);
 		selectedTile = null;
 		date = new Calendar(0, 1, 0, 0);

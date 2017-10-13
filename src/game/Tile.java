@@ -1,5 +1,6 @@
 package game;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import graphics.Model;
@@ -9,19 +10,40 @@ import graphics.Texture;
 import main.Main;
 import misc.Defines;
 
-public class Tile
+public class Tile implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7602316466663527490L;
 	private List<Population> pops;
 	private List<Factory> factories;
-	private Sprite sprite;
+	private transient Sprite sprite;
 	private String resourceType;
 	private String terrainType;
 	private Nation owner;
+	public Tile north, west, south, east;
 	private float x, y;
 	private float populationGrowth;
 	private float resourceOutput;
 	private float productionPerPop;
 	private float foodPerPop;
+	private int numberOfFarms, numberOfWoodcutters;
+	
+	public int getNumberWoodcutter()
+	{
+		return numberOfWoodcutters;
+	}
+	
+	public int getNumberOfFarms()
+	{
+		return numberOfFarms;
+	}
+	
+	private void updateBorder()
+	{
+		
+	}
 	
 	public List<Population> getPops()
 	{
@@ -35,18 +57,51 @@ public class Tile
 	
 	public void buildWoodcutter()
 	{
-		
+		if(this.getResourceType() == "Wood" && owner.getStockpile("Wood") >= 0.01f && owner.getMoney() >= 0.01f)
+		{
+			owner.changeStockpile("Wood", -0.01f);
+			owner.changeMoney(0.01f);
+		}
+		else
+			return;
+		numberOfWoodcutters++;
+		float money = 0.01f;
+		float pay = 0.001f;
+		int baseWorkspace = 10;
+		float baseProduction = 1.0f;
+		float[] resourceOutputAmount = new float[]
+				{
+						0.01f
+				};
+		String[] resourceOutput = new String[]
+				{
+					"Wood"	
+				};
+		float[] resourceInputAmount = new float[]
+				{
+			
+				};
+		String[] resourceInput = new String[]
+				{
+						
+				};
+		factories.add(new Factory(this, resourceInput, resourceInputAmount, resourceOutput, 
+				resourceOutputAmount, baseProduction, baseWorkspace, pay, money, "Woodcutter"));
 	}
 	
 	public void buildFarm()
 	{
-		if(owner.getStockpile("Wood") >= 1.0f)
-			owner.changeStockpile("Wood", -1.0f);
+		if(this.getResourceType() == "Food" && owner.getStockpile("Wood") >= 0.01f && owner.getMoney() >= 0.01f)
+		{
+			owner.changeStockpile("Wood", -0.01f);
+			owner.changeMoney(-0.01f);
+		}
 		else
 			return;
-		float money = 10.0f;
-		float pay = 0.00001f;
-		int baseWorkspace = 1000;
+		numberOfFarms++;
+		float money = 0.01f;
+		float pay = 0.001f;
+		int baseWorkspace = 10;
 		float baseProduction = 1.0f;
 		float[] resourceOutputAmount = new float[]
 				{
@@ -80,6 +135,10 @@ public class Tile
 	
 	public void colonize(Nation nation)
 	{
+		if(nation.getMoney() >= 1.0d)
+			nation.changeMoney(-1.0d);
+		else
+			return;
 		this.changeOwner(nation);
 		
 		changePopulation(new Population(nation.getCulture(), nation.getReligion(), "Unemployed", 2.0d));
@@ -150,8 +209,9 @@ public class Tile
 	
 	private void popGrowth()
 	{
-		for(Population pop: pops)
+		for(int i = 0; i < pops.size(); i++)
 		{
+			Population pop = pops.get(i);
 			double temp = pop.getAmount() * populationGrowth / 720;//720;
 			changePopulation(new Population(pop.getCulture(), pop.getReligion(), "Unemployed", temp));
 		}
@@ -204,8 +264,27 @@ public class Tile
 		owner.changeStockpile(resourceType, getResourceOutput());
 	}
 	
+	public void initGraphics()
+	{
+		if(terrainType.compareTo("Plain") == 0)
+		{
+			sprite = new Sprite(new Texture("/images/sprTerrainPlain.png"));
+		}
+		else if(terrainType.compareTo("Desert") == 0)
+		{
+			sprite = new Sprite(new Texture("/images/sprTerrainDesert.png"));
+		}
+		else if(terrainType.compareTo("Water") == 0)
+		{
+			sprite = new Sprite(new Texture("/images/sprTerrainWater.png"));
+		}
+		sprite.getModel().setX(this.x);
+		sprite.getModel().setY(this.y);
+	}
+	
 	public Tile(float x, float y)
 	{
+		numberOfFarms = numberOfWoodcutters = 0;
 		factories = new ArrayList<>();
 		resourceOutput = 0.0f;
 		populationGrowth = 1f;
@@ -221,22 +300,8 @@ public class Tile
 				Defines.terrainTypes.length)];
 		resourceType = Defines.resourceTypes[Main.randomGenerator.nextInt(
 				Defines.resourceTypes.length)];
-
-		if(terrainType == "Plain")
-		{
-			sprite = new Sprite(new Texture("/images/sprTerrainPlain.png"));
-		}
-		else if(terrainType == "Desert")
-		{
-			sprite = new Sprite(new Texture("/images/sprTerrainDesert.png"));
-		}
-		else if(terrainType == "Water")
-		{
-			sprite = new Sprite(new Texture("/images/sprTerrainWater.png"));
-		}
 		
-		sprite.getModel().setX(this.x);
-		sprite.getModel().setY(this.y);
+		initGraphics();
 	}
 	
 	public void render()
@@ -246,7 +311,10 @@ public class Tile
 	
 	public void updateOnHour()
 	{
-		
+		if(owner != null)
+		{
+			updateBorder();
+		}
 	}
 	
 	public void updateOnDay()

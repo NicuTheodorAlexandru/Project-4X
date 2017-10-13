@@ -9,17 +9,9 @@ import org.joml.Vector3f;
 import graphics.Mesh;
 
 public class OBJLoader
-{
-	public static Vector3f minPos;
-	public static Vector3f maxPos;
-	
+{	
 	public static Mesh loadSpriteMesh(String fileName, float[] vert)
-	{
-		minPos = new Vector3f();
-		minPos.x = minPos.y = minPos.z = Float.POSITIVE_INFINITY;
-		maxPos = new Vector3f();
-		maxPos.x = maxPos.y = maxPos.z = Float.NEGATIVE_INFINITY;
-		
+	{	
 		List<String> lines = Utils.readAllLines(fileName);
         
         List<Vector3f> vertices = new ArrayList<>();
@@ -30,19 +22,6 @@ public class OBJLoader
         for(int i = 0; i < vert.length; i += 3)
         {
         	vertices.add(new Vector3f(vert[i], vert[i + 1], vert[i + 2]));
-        	if(vert[i] > maxPos.x)
-        		maxPos.x = vert[i];
-        	if(vert[i] < minPos.x)
-        		minPos.x = vert[i];
-        	if(vert[i + 1] > maxPos.y)
-        		maxPos.y = vert[i + 1];
-        	if(vert[i + 1] < minPos.y)
-        		minPos.y = vert[i + 1];
-        	if(vert[i + 2] > maxPos.z)
-        		maxPos.z = vert[i + 2];
-        	if(vert[i + 2] < minPos.z)
-        		minPos.z = vert[i + 2];
-        	
         }
 
         for (String line : lines) {
@@ -76,12 +55,7 @@ public class OBJLoader
 	}
 	
 	public static Mesh loadMesh(String fileName) 
-	{
-		minPos = new Vector3f();
-		minPos.x = minPos.y = minPos.z = Float.POSITIVE_INFINITY;
-		maxPos = new Vector3f();
-		maxPos.x = maxPos.y = maxPos.z = Float.NEGATIVE_INFINITY;
-		
+	{	
         List<String> lines = Utils.readAllLines(fileName);
         
         List<Vector3f> vertices = new ArrayList<>();
@@ -99,18 +73,6 @@ public class OBJLoader
                             Float.parseFloat(tokens[2]),
                             Float.parseFloat(tokens[3]));
                     vertices.add(vec3f);
-                    if(vec3f.x > maxPos.x)
-                		maxPos.x = vec3f.x;
-                	if(vec3f.x < minPos.x)
-                		minPos.x = vec3f.x;
-                	if(vec3f.y > maxPos.y)
-                		maxPos.y = vec3f.y;
-                	if(vec3f.y < minPos.y)
-                		minPos.y = vec3f.y;
-                	if(vec3f.z > maxPos.z)
-                		maxPos.z = vec3f.z;
-                	if(vec3f.z < minPos.z)
-                		minPos.z = vec3f.z;
                     break;
                 case "vt":
                     // Texture coordinate
@@ -165,8 +127,6 @@ public class OBJLoader
         int[] indicesArr = new int[indices.size()];
         indicesArr = indices.stream().mapToInt((Integer v) -> v).toArray();
         Mesh mesh = new Mesh(posArr, textCoordArr, normArr, indicesArr);
-        mesh.setMinPos(minPos);
-        mesh.setMaxPos(maxPos);
         return mesh;
     }
 

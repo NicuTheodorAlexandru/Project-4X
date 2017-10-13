@@ -1,20 +1,52 @@
 package graphics;
 
+import java.io.Serializable;
+
+import org.joml.Vector4f;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
 import main.Main;
 
-public class Text
+public class Text implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1914974323957980651L;
 	private String text;
-	private NVGColor color;
+	private Vector4f color;
 	private String fontName;
 	private float fontSize;
 	private float x;
 	private float y;
 	private float width;
 	private float height;
+	
+	public void setY(float y)
+	{
+		this.y = y;
+	}
+	
+	public void setX(float x)
+	{
+		this.x = x;
+	}
+	
+	public float getY()
+	{
+		return y;
+	}
+	
+	public float getX()
+	{
+		return x;
+	}
+	
+	public void changeY(float value)
+	{
+		y += value;
+	}
 	
 	public float getHeight()
 	{
@@ -52,25 +84,42 @@ public class Text
 	
 	public void setColor(float red, float green, float blue, float alpha)
 	{
-		color.r(red / 255.0f);
-		color.g(green / 255.0f);
-		color.b(blue / 255.0f);
-		color.a(alpha / 255.0f);
+		color.x = (red / 255.0f);
+		color.y = (green / 255.0f);
+		color.z = (blue / 255.0f);
+		color.w = (alpha / 255.0f);
 	}
 	
 	public void render()
 	{
+		NVGColor color = NVGColor.create();
+
 		NanoVG.nvgBeginPath(Main.vg);
+		//render background
+		color.r(1.0f);
+		color.g(1.0f);
+		color.b(1.0f);
+		color.a(1.0f);
+		NanoVG.nvgRect(Main.vg, x, y, width, height);
+		NanoVG.nvgFillColor(Main.vg, color);
+		NanoVG.nvgFill(Main.vg);
+		//render text
+		color.r(this.color.x);
+		color.g(this.color.y);
+		color.b(this.color.z);
+		color.a(this.color.w);
 		NanoVG.nvgFontSize(Main.vg, fontSize);
 		NanoVG.nvgFontFace(Main.vg, fontName);
 		NanoVG.nvgTextAlign(Main.vg, NanoVG.NVG_ALIGN_LEFT);
 		NanoVG.nvgFontBlur(Main.vg, 0);
-		NanoVG.nvgText(Main.vg, x, y, text);
+		NanoVG.nvgFillColor(Main.vg, color);
+		NanoVG.nvgText(Main.vg, x, y + fontSize, text);
 	}
 	
 	public void setText(String text)
 	{
 		this.text = text;
+		getTextSize();
 	}
 	
 	public String getText()
@@ -83,7 +132,7 @@ public class Text
 		this.text = text;
 		this.x = x;
 		this.y = y;
-		color = NVGColor.create();
+		color = new Vector4f();
 		setColor(0, 0, 0, 255.0f);
 		fontName = "Consolas";
 		fontSize = 20.0f;

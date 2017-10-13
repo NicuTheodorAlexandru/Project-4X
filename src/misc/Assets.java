@@ -1,11 +1,17 @@
 package misc;
 
 import java.awt.Font;
+import java.nio.ByteBuffer;
+import org.lwjgl.nanovg.NanoVG;
+import org.lwjgl.system.MemoryUtil;
 import graphics.Sprite;
 import graphics.Texture;
+import main.Main;
 
 public class Assets
 {
+	//GUI sprites
+	public static int imgBuild;
 	//text defines
 	public static String charset = "ISO-8859-1";
 	public static Font fntArial = new Font("Consolas", Font.PLAIN, 20);
@@ -36,6 +42,18 @@ public class Assets
 		sprTerrainPlain.cleanup();
 		sprTerrainDesert.cleanup();
 		sprTerrainWater.cleanup();
+		//
+	}
+	
+	public static void initNano()
+	{
+		//fonts
+		ByteBuffer buffer = null;
+		buffer = Utils.ioResourceToByteBuffer("/fonts/Consolas.ttf", 450 * 1024);
+		NanoVG.nvgCreateFontMem(Main.vg, "Consolas", buffer, 0);
+		MemoryUtil.memFree(buffer);
+		//images
+		imgBuild = Utils.getNanoVGImage("/images/sprBuild.png", 16 * 1024);
 	}
 	
 	public static void init()

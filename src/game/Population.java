@@ -1,7 +1,13 @@
 package game;
 
-public class Population
+import java.io.Serializable;
+
+public class Population implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1145577335962511315L;
 	private String culture, job, religion;
 	private double amount;
 	public boolean fed;

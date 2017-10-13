@@ -1,21 +1,33 @@
 package game;
 
+import java.io.Serializable;
 import java.util.HashMap;
 
 import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import misc.Defines;
 
-public class Nation
+public class Nation implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -4365089421575696350L;
 	private final Vector3f color;
 	private String name;
 	private String culture;
 	private String religion;
 	private HashMap<String, Double> stockpile;
 	private HashMap<String, Double> storage;
+	private long tag;
 	private double money;
 	private int population;
+	
+	public long getTag()
+	{
+		return tag;
+	}
 	
 	public String getReligion()
 	{
@@ -76,16 +88,16 @@ public class Nation
 		return name;
 	}
 	
-	public Vector3f getColor()
+	public Vector4f getColor()
 	{
-		return color;
+		return new Vector4f(color, 1.0f);
 	}
 	
 	public Nation(String name, String culture, String religion, Vector3f color)
 	{	
 		this.color = color;
 		this.name = name;
-		money = 0.0d;
+		money = 1.0d;
 		
 		storage = new HashMap<>();
 		stockpile = new HashMap<>();
