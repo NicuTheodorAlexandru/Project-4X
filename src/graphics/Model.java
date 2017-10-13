@@ -7,6 +7,7 @@ public class Model
 	private Mesh mesh;
 	private final Vector3f position;
 	private final Vector3f rotation;
+	private float size;
 	private Vector3f scale;
 	private boolean selected;
 	
@@ -55,12 +56,17 @@ public class Model
 	
 	public float getSize()
 	{
-		return 1.0f;
+		return size;
+	}
+	
+	public void setScale(float value)
+	{
+		size = value;
 	}
 	
 	public Vector3f getScale()
 	{
-		return scale;
+		return new Vector3f(scale.x * size, scale.y * size, scale.z * size);
 	}
 	
 	public Vector3f getRotation()
@@ -141,6 +147,7 @@ public class Model
 	{
 		selected = false;
 		this.mesh = mesh;
+		size = 1.0f;
 		position = new Vector3f(0, 0, 0);
 		rotation = new Vector3f(0, 0, 0);
 		scale = new Vector3f(mesh.getLength());
