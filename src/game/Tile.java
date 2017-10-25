@@ -3,6 +3,9 @@ package game;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+
+import buildings.Factory;
+import buildings.Storage;
 import graphics.Model;
 import graphics.Renderer;
 import graphics.Sprite;
@@ -18,6 +21,7 @@ public class Tile implements Serializable
 	private static final long serialVersionUID = 7602316466663527490L;
 	private List<Population> pops;
 	private List<Factory> factories;
+	private List<Storage> storages;
 	private transient Sprite sprite;
 	private String resourceType;
 	private String terrainType;
@@ -29,6 +33,17 @@ public class Tile implements Serializable
 	private float productionPerPop;
 	private float foodPerPop;
 	private int numberOfFarms, numberOfWoodcutters;
+	private int numberOfFoodStorages, numberOfWoodStorages;
+	
+	public int getNumberOfWoodStorage()
+	{
+		return numberOfWoodStorages;
+	}
+	
+	public int getNumberOfFoodStorages()
+	{
+		return numberOfFoodStorages;
+	}
 	
 	public int getNumberWoodcutter()
 	{
@@ -55,12 +70,35 @@ public class Tile implements Serializable
 		return factories.size();
 	}
 	
-	public void buildWoodcutter()
+	public void buildWoodStorage()
 	{
-		if(this.getResourceType() == "Wood" && owner.getStockpile("Wood") >= 0.01f && owner.getMoney() >= 0.01f)
+		if(owner.getStockpile("Wood") >= 0.01f)
 		{
 			owner.changeStockpile("Wood", -0.01f);
-			owner.changeMoney(0.01f);
+		}
+		else 
+			return;
+		storages.add(new Storage(1.0f, "Wood", owner));
+		numberOfWoodStorages++;
+	}
+	
+	public void buildFoodStorage()
+	{
+		if(owner.getStockpile("Wood") >= 0.01f)
+		{
+			owner.changeStockpile("Wood", -0.01f);
+		}
+		else 
+			return;
+		storages.add(new Storage(1.0f, "Food", owner));
+		numberOfFoodStorages++;
+	}
+	
+	public void buildWoodcutter()
+	{
+		if(this.getResourceType() == "Wood" && owner.getStockpile("Wood") >= 0.01f)
+		{
+			owner.changeStockpile("Wood", -0.01f);
 		}
 		else
 			return;
@@ -91,10 +129,9 @@ public class Tile implements Serializable
 	
 	public void buildFarm()
 	{
-		if(this.getResourceType() == "Food" && owner.getStockpile("Wood") >= 0.01f && owner.getMoney() >= 0.01f)
+		if(this.getResourceType() == "Food" && owner.getStockpile("Wood") >= 0.01f)
 		{
 			owner.changeStockpile("Wood", -0.01f);
-			owner.changeMoney(-0.01f);
 		}
 		else
 			return;
@@ -286,6 +323,7 @@ public class Tile implements Serializable
 	{
 		numberOfFarms = numberOfWoodcutters = 0;
 		factories = new ArrayList<>();
+		storages = new ArrayList<>();
 		resourceOutput = 0.0f;
 		populationGrowth = 1f;
 		productionPerPop = 0.0001f;

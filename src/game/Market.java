@@ -3,6 +3,7 @@ package game;
 import java.io.Serializable;
 import java.util.HashMap;
 
+import buildings.Factory;
 import misc.Defines;
 
 public class Market implements Serializable

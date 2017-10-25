@@ -24,6 +24,11 @@ public class Nation implements Serializable
 	private double money;
 	private int population;
 	
+	public void changeStorage(String resourceType, double amount)
+	{
+		storage.put(resourceType, stockpile.get(resourceType) + amount);
+	}
+	
 	public long getTag()
 	{
 		return tag;

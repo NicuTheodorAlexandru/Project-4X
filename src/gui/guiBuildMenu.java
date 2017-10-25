@@ -13,6 +13,8 @@ public class guiBuildMenu extends guiList
 	{
 		buttons.add(new guiButton(x, y + 0 * 25, "Build farm "));
 		buttons.add(new guiButton(x, y + 1 * 25, "Build woodcutter "));
+		buttons.add(new guiButton(x, y + 2 * 25, "Build food storage "));
+		buttons.add(new guiButton(x, y + 3 * 25, "Build wood storage "));
 	}
 	
 	public void update()
@@ -31,6 +33,14 @@ public class guiBuildMenu extends guiList
 				{
 					Level.selectedTile.buildWoodcutter();
 				}
+				else if(i == 2 && Level.selectedTile != null)
+				{
+					Level.selectedTile.buildFoodStorage();
+				}
+				else if(i == 3 && Level.selectedTile != null)
+				{
+					Level.selectedTile.buildWoodStorage();
+				}
 			}
 			if(i == 0 && Level.selectedTile != null)
 			{
@@ -39,6 +49,14 @@ public class guiBuildMenu extends guiList
 			else if(i == 1 && Level.selectedTile != null)
 			{
 				buttons.get(i).setText("Build woodcutter " + Level.selectedTile.getNumberWoodcutter());
+			}
+			else if(i == 2 && Level.selectedTile != null)
+			{
+				buttons.get(i).setText("Build food storage " + Level.selectedTile.getNumberOfFoodStorages());
+			}
+			else if(i == 3 && Level.selectedTile != null)
+			{
+				buttons.get(i).setText("Build wood storage " + Level.selectedTile.getNumberOfWoodStorage());
 			}
 		}
 	}

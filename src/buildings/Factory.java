@@ -1,7 +1,11 @@
-package game;
+package buildings;
 
 import java.io.Serializable;
 import java.util.HashMap;
+
+import game.Population;
+import game.Tile;
+import game.World;
 
 public class Factory implements Serializable
 {
