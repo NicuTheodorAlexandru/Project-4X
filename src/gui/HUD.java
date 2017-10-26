@@ -1,12 +1,8 @@
-package graphics;
+package gui;
 
 import game.Level;
 import game.SaveGame;
-import gui.guiBuildMenu;
-import gui.guiButton;
-import gui.guiResourceList;
-import gui.guiSprite;
-import gui.guiTooltip;
+import graphics.Text;
 import input.Keyboard;
 import main.Main;
 import misc.Assets;
@@ -137,7 +133,7 @@ public class HUD
 			{
 				saveGameButton.update();
 				if(saveGameButton.getActivated())
-					SaveGame.saveGame("save");
+					SaveGame.saveGame();
 				exitGameButton.update();
 				if(exitGameButton.getActivated())
 				{

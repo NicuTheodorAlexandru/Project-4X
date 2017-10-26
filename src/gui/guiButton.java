@@ -3,7 +3,6 @@ package gui;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
-import graphics.HUD;
 import graphics.Text;
 import input.Mouse;
 import main.Main;
@@ -20,6 +19,16 @@ public class guiButton
 	private Text text;
 	private boolean activated;
 	private boolean pressed;
+	
+	public void setX(double x)
+	{
+		this.x = (float)x;
+	}
+	
+	public Text getText()
+	{
+		return text;
+	}
 	
 	public void setText(String text)
 	{

@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import graphics.HUD;
 import graphics.Model;
 import graphics.Renderer;
+import gui.HUD;
 import input.Keyboard;
 import input.Mouse;
 import main.Main;

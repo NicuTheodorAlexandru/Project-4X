@@ -4,11 +4,27 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-
+import java.time.LocalDateTime;
 import main.Main;
 
 public class SaveGame
 {
+	public static void saveGame()
+	{
+		LocalDateTime now = LocalDateTime.now();
+		String filename = "";
+		filename += now.getMinute();
+		filename += "_";
+		filename += now.getHour();
+		filename += "_";
+		filename += now.getDayOfMonth();
+		filename += "_";
+		filename += now.getMonthValue();
+		filename += "_";
+		filename += now.getYear();
+		SaveGame.saveGame(filename);
+	}
+	
 	public static void saveGame(String filename)
 	{
 		try 

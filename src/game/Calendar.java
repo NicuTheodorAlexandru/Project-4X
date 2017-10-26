@@ -2,8 +2,8 @@ package game;
 
 import java.io.Serializable;
 
-import graphics.HUD;
 import graphics.Text;
+import gui.HUD;
 import input.Keyboard;
 import main.Main;
 import misc.Settings;

@@ -3,7 +3,6 @@ package gui;
 import java.util.ArrayList;
 import java.util.List;
 import game.World;
-import graphics.HUD;
 import graphics.Text;
 import input.Keyboard;
 import main.Main;
