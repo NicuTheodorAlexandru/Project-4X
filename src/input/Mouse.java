@@ -9,8 +9,7 @@ import static org.lwjgl.glfw.GLFW.glfwSetCursorPosCallback;
 import static org.lwjgl.glfw.GLFW.glfwSetMouseButtonCallback;
 import org.joml.Vector2d;
 import org.joml.Vector2f;
-import org.joml.Vector3f;
-import main.Main;
+import org.lwjgl.glfw.GLFW;
 import main.Window;
 
 public class Mouse
@@ -26,20 +25,18 @@ public class Mouse
 	private static boolean rightMouseReleased = false;
 	private static boolean leftMouse = false;
 	private static boolean rightMouse = false;
+	private static double scrollX = 0.0d;
+	private static double scrollY = 0.0d;
 	private Window window;
 	
-	public static Vector3f getMouseWorldPosition()
+	public static double getScrollX()
 	{
-		
-		Vector3f pos = new Vector3f();
-		
-		float x = (float)(2 * position.x / Main.window.getWindowWidth() - 1) * (-1);
-		float y = (float)(1 - 2 * position.y / Main.window.getWindowHeight());
-		
-		pos.x = x;
-		pos.y = y;
-		
-		return pos;
+		return scrollX;
+	}
+	
+	public static double getScrollY()
+	{
+		return scrollY;
 	}
 	
 	public static boolean rightMouse()
@@ -78,6 +75,8 @@ public class Mouse
 	}
 	
 	public void input() {
+		scrollX = 0;
+		scrollY = 0;
 		position.x = currentPos.x;
 		position.y = currentPos.y;
         displVec.x = 0;
@@ -105,6 +104,11 @@ public class Mouse
 	
 	public void init()
 	{
+		 GLFW.glfwSetScrollCallback(window.getWindowID(), (windowhandle, xoffset, yoffset) -> 
+		 {
+	         scrollX = xoffset;
+	         scrollY = yoffset;
+	     });
 		 glfwSetCursorPosCallback(window.getWindowID(), (windowHandle, xpos, ypos) -> 
 		 {
 	         currentPos.x = xpos;

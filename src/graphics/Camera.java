@@ -3,6 +3,7 @@ package graphics;
 import org.joml.Vector3f;
 import org.lwjgl.glfw.GLFW;
 import input.Keyboard;
+import input.Mouse;
 import misc.Settings;
 
 public class Camera
@@ -10,8 +11,16 @@ public class Camera
 	private final Vector3f position;
 	private final Vector3f rotation;
 	
+	private void zoom()
+	{
+		Vector3f z = new Vector3f(0, 0, 0);
+		z.z -= Mouse.getScrollY();
+		movePosition(z);
+	}
+	
 	public void update()
 	{
+		zoom();
 		Vector3f cameraInc = new Vector3f(0, 0, 0);
 		
         if (Keyboard.getKey(GLFW.GLFW_KEY_A)) 
@@ -42,6 +51,8 @@ public class Camera
             position.x += (float)Math.sin(Math.toRadians(rotation.y - 90)) * -1.0f * movePosition.x;
             position.z += (float)Math.cos(Math.toRadians(rotation.y - 90)) * movePosition.x;
         }
+        if(position.z >= 0)
+        	position.z = -0.5f;
         position.y += movePosition.y;
 	}
 	

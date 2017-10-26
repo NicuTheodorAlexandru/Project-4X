@@ -19,8 +19,8 @@ public class Market implements Serializable
 	{
 		double money = amount * prices.get(resource);
 		double price = prices.get(resource) - priceChangePerUnit * amount;
-		if(price < 0.01d)
-			price = 0.01d;
+		if(price < 0.1d)
+			price = 0.1d;
 		prices.put(resource, price);
 		factory.changeStockpile(resource, -amount);
 		factory.changeMoney(money);
