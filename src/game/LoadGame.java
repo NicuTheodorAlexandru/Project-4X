@@ -4,7 +4,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 
-import gui.HUD;
+import hud.HUD;
 import main.Main;
 
 public class LoadGame

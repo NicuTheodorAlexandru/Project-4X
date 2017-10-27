@@ -1,8 +1,13 @@
-package gui;
+package hud;
 
 import game.Level;
 import game.SaveGame;
 import graphics.Text;
+import gui.guiBuildMenu;
+import gui.guiButton;
+import gui.guiResourceList;
+import gui.guiSprite;
+import gui.guiTooltip;
 import input.Keyboard;
 import main.Main;
 import misc.Assets;
@@ -21,7 +26,9 @@ public class HUD
 	private guiButton resumeGameButton;
 	private guiButton saveGameButton;
 	private guiButton buildFactoryButton;
+	private guiButton openDiplomacyButton;
 	private guiTooltip profit;
+	private Diplomacy diplomacy;
 	private Text provincePopulation;
 	private Text provinceResource;
 	private Text money;
@@ -277,6 +284,8 @@ public class HUD
 		
 		if(profit != null)
 			profit.render();
+		if(diplomacy != null)
+			diplomacy.render();
 	}
 	
 	public HUD()

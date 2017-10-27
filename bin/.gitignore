@@ -1,9 +1,14 @@
+/buildings/
+/fonts/
 /game/
 /graphics/
 /gui/
+/images/
 /input/
 /main/
 /menu/
 /misc/
-/buildings/
+/models/
 /saves/
+/shaders/
+/hud/

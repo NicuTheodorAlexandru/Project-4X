@@ -20,13 +20,35 @@ public class Nation implements Serializable
 	private String religion;
 	private HashMap<String, Double> stockpile;
 	private HashMap<String, Double> storage;
+	private HashMap<String, Integer> relations;
+	private HashMap<String, String> diplomacy;
 	private long tag;
 	private double money;
 	private int population;
 	
+	public void setDiplomacy(Nation nation, String value)
+	{
+		diplomacy.put(nation.getName(), value);
+	}
+	
+	public void changeRelations(Nation nation, int value)
+	{
+		relations.put(nation.getName(), relations.get(nation.getName()) + value);
+	}
+	
+	public String getDiplomacy(Nation nation)
+	{
+		return diplomacy.get(nation.getName());
+	}
+	
+	public int getRelations(Nation nation)
+	{
+		return relations.get(nation.getName());
+	}
+	
 	public void changeStorage(String resourceType, double amount)
 	{
-		storage.put(resourceType, stockpile.get(resourceType) + amount);
+		storage.put(resourceType, storage.get(resourceType) + amount);
 	}
 	
 	public long getTag()
@@ -104,6 +126,8 @@ public class Nation implements Serializable
 		this.name = name;
 		money = 1.0d;
 		
+		relations = new HashMap<>();
+		diplomacy = new HashMap<>();
 		storage = new HashMap<>();
 		stockpile = new HashMap<>();
 		for(String resource: Defines.resourceTypes)

@@ -3,7 +3,7 @@ package game;
 import java.io.Serializable;
 
 import graphics.Text;
-import gui.HUD;
+import hud.HUD;
 import input.Keyboard;
 import main.Main;
 import misc.Settings;

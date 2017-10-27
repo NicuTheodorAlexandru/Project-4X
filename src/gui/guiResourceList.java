@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import game.World;
 import graphics.Text;
+import hud.HUD;
 import input.Keyboard;
 import main.Main;
 import misc.Defines;

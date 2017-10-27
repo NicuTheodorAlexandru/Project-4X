@@ -10,7 +10,7 @@ import org.lwjgl.opengl.GL11;
 import game.Level;
 import graphics.Camera;
 import graphics.Renderer;
-import gui.HUD;
+import hud.HUD;
 import input.Keyboard;
 import input.Mouse;
 import menu.MainMenu;

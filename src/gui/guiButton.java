@@ -4,6 +4,7 @@ import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
 
 import graphics.Text;
+import hud.HUD;
 import input.Mouse;
 import main.Main;
 

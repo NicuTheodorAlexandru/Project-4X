@@ -1,7 +1,6 @@
 package game;
 
 import java.io.Serializable;
-
 import misc.Defines;
 
 public class World implements Serializable
@@ -13,6 +12,21 @@ public class World implements Serializable
 	private Tile[][] tiles;
 	private int widthTiles, heightTiles;
 	public static Market market;
+	
+	public Tile getTile(int x, int y)
+	{
+		return tiles[x][y];
+	}
+	
+	public int getHeight()
+	{
+		return heightTiles;
+	}
+	
+	public int getWidth()
+	{
+		return widthTiles;
+	}
 	
 	public void load()
 	{

@@ -1,12 +1,15 @@
 package game;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.joml.Vector3f;
+
 import graphics.Model;
 import graphics.Renderer;
-import gui.HUD;
+import hud.HUD;
 import input.Keyboard;
 import input.Mouse;
 import main.Main;
@@ -21,6 +24,7 @@ public class Level implements Serializable
 	private static final long serialVersionUID = -1115634716574780107L;
 	private World world;
 	private List<Nation> nations;
+	private List<AI> ais;
 	public Nation player;
 	public static Calendar date;
 	private MouseBoxSelection mouseBoxSelection;
@@ -28,6 +32,11 @@ public class Level implements Serializable
 	public static int FRAMES_PER_HOUR = 10;
 	public static int HOURS_PER_FRAME = 1;
 	private int hour, day;
+	
+	public World getWorld()
+	{
+		return world;
+	}
 	
 	public void load()
 	{
@@ -110,6 +119,11 @@ public class Level implements Serializable
 		
 		world.update();
 		
+		if(!date.getPause())
+		{
+			for(int i = 0; i < ais.size(); i++)
+				ais.get(i).update();
+		}
 		if(hour != date.getHour())
 		{
 			updateOnHour();
@@ -124,12 +138,16 @@ public class Level implements Serializable
 	
 	public Level(Nation nation, int worldWidth, int worldHeight)
 	{
+		nations = new ArrayList<>();
+		ais = new ArrayList<>();
 		mouseBoxSelection = new MouseBoxSelection();
 		player = nation;
+		nations.add(player);
 		world = new World(worldWidth, worldHeight);
 		selectedTile = null;
 		date = new Calendar(0, 1, 0, 0);
 		hour = date.getHour();
 		day = date.getDay();
+		ais.add(new AI(new Nation("Russia", "Russian", "Orthodox", new Vector3f(0.206f, 0.4f, 0.206f)), world.getTile(0, 0)));
 	}
 }

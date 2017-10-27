@@ -11,9 +11,7 @@ public class Storage implements Serializable
 	 */
 	private static final long serialVersionUID = -7752018496241131802L;
 	
-	private float storageAmount;
-	private String resourceType;
-	private Nation nation;
+	private Nation owner;
 	
 	public void render()
 	{
@@ -25,11 +23,9 @@ public class Storage implements Serializable
 		
 	}
 	
-	public Storage(float storageAmount, String resourceType, Nation nation)
+	public Storage(float storageAmount, String resourceType, Nation owner)
 	{
-		this.storageAmount = storageAmount;
-		this.resourceType = resourceType;
-		this.nation = nation;
-		nation.changeStorage(resourceType, storageAmount);
+		this.owner = owner;
+		this.owner.changeStorage(resourceType, storageAmount);
 	}
 }
