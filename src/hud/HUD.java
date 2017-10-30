@@ -1,6 +1,7 @@
 package hud;
 
 import game.Level;
+import game.Nation;
 import game.SaveGame;
 import graphics.Text;
 import gui.guiBuildMenu;
@@ -26,7 +27,7 @@ public class HUD
 	private guiButton resumeGameButton;
 	private guiButton saveGameButton;
 	private guiButton buildFactoryButton;
-	private guiButton openDiplomacyButton;
+	private guiButton openDiplomacy;
 	private guiTooltip profit;
 	private Diplomacy diplomacy;
 	private Text provincePopulation;
@@ -35,6 +36,18 @@ public class HUD
 	private Text resources;
 	private float exMoney;
 	private float exexMoney;
+	
+	public void openDiplomacy(Nation nation)
+	{
+		diplomacy = new Diplomacy(100, 100, 200, 400, nation);
+		interfaceOpen = true;
+	}
+	
+	public void closeDiplomacy()
+	{
+		diplomacy = null;
+		interfaceOpen = false;
+	}
 	
 	private void provinceInfo()
 	{
@@ -60,6 +73,9 @@ public class HUD
 					provincePopulation = new Text(0.0f, Main.window.getWindowHeight() - 20.0f, p);
 					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 80.0f, 
 							new guiSprite(Assets.imgBuild));
+					if(Level.selectedTile.getOwner() != Main.level.player)
+						openDiplomacy = new guiButton(0.0f, Main.window.getWindowHeight() - 120.0f, 
+								new guiSprite(Assets.imgDiplomacy));
 				}
 			}
 		}
@@ -255,6 +271,46 @@ public class HUD
 				}
 			}
 		}
+		if(openDiplomacy != null)
+		{
+			if(Level.selectedTile == null || Level.selectedTile.getOwner() == Main.level.player)
+			{
+				openDiplomacy = null;
+			}
+			else
+			{
+				openDiplomacy.update();
+				if(openDiplomacy.getActivated())
+				{
+					if(diplomacy == null)
+					{
+						openDiplomacy(Level.selectedTile.getOwner());
+					}
+					else
+					{
+						if(diplomacy.getNation().getName() == Level.selectedTile.getOwner().getName())
+						{
+							closeDiplomacy();
+						}
+						else
+						{
+							openDiplomacy(Level.selectedTile.getOwner());
+						}
+					}
+				}
+			}
+		}
+		if(diplomacy != null)
+		{
+			if(Keyboard.getKeyPressed(Settings.keyExit))
+			{
+				closeDiplomacy();
+			}
+			else
+			{
+				diplomacy.update();
+			}
+		}
 		provinceInfo();
 	}
 	
@@ -281,7 +337,8 @@ public class HUD
 			colonizeButton.render();
 		if(provincePopulation != null)
 			provincePopulation.render();
-		
+		if(openDiplomacy != null)
+			openDiplomacy.render();
 		if(profit != null)
 			profit.render();
 		if(diplomacy != null)

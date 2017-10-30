@@ -31,18 +31,40 @@ public class Nation implements Serializable
 		diplomacy.put(nation.getName(), value);
 	}
 	
+	public void addDiplomacy(Nation nation)
+	{
+		diplomacy.put(nation.getName(), "Peace");
+	}
+	
+	public void addRelation(Nation nation)
+	{
+		relations.put(nation.getName(), 0);
+	}
+	
 	public void changeRelations(Nation nation, int value)
 	{
-		relations.put(nation.getName(), relations.get(nation.getName()) + value);
+		int base = 0;
+		base += relations.get(nation.getName());
+		relations.put(nation.getName(), base + value);
 	}
 	
 	public String getDiplomacy(Nation nation)
 	{
-		return diplomacy.get(nation.getName());
+		String res = diplomacy.get(nation.getName());
+		if(res == null)
+		{
+			addDiplomacy(nation);
+			res = diplomacy.get(nation.getName());
+		}
+		return res;
 	}
 	
 	public int getRelations(Nation nation)
 	{
+		if(relations.get(nation.getName()) == null)
+		{
+			addRelation(nation);
+		}
 		return relations.get(nation.getName());
 	}
 	

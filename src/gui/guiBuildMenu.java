@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import game.Level;
+import main.Main;
 
 public class guiBuildMenu extends guiList
 {
@@ -23,21 +24,22 @@ public class guiBuildMenu extends guiList
 		for(int i = 0; i < buttons.size(); i++)
 		{
 			buttons.get(i).update();
-			if(buttons.get(i).getActivated())
+			if(buttons.get(i).getActivated() && Level.selectedTile != null 
+					&& Level.selectedTile.getOwner() == Main.level.player)
 			{
-				if(i == 0 && Level.selectedTile != null)
+				if(i == 0)
 				{
 					Level.selectedTile.buildFarm();
 				}
-				else if(i == 1 && Level.selectedTile != null)
+				else if(i == 1)
 				{
 					Level.selectedTile.buildWoodcutter();
 				}
-				else if(i == 2 && Level.selectedTile != null)
+				else if(i == 2)
 				{
 					Level.selectedTile.buildFoodStorage();
 				}
-				else if(i == 3 && Level.selectedTile != null)
+				else if(i == 3)
 				{
 					Level.selectedTile.buildWoodStorage();
 				}
