@@ -1,7 +1,9 @@
 package game;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -22,9 +24,36 @@ public class Nation implements Serializable
 	private HashMap<String, Double> storage;
 	private HashMap<String, Integer> relations;
 	private HashMap<String, String> diplomacy;
+	private List<Army> armies;
 	private long tag;
 	private double money;
 	private int population;
+	private int manpower;
+	
+	public List<Army> getArmies()
+	{
+		return armies;
+	}
+	
+	public int changeManpower(int amount)
+	{
+		if(amount >= manpower)
+		{
+			manpower -= amount;
+			return amount;
+		}
+		else
+		{
+			amount = manpower;
+			manpower = 0;
+			return amount;
+		}
+	}
+	
+	public int getManpower()
+	{
+		return manpower;
+	}
 	
 	public void setDiplomacy(Nation nation, String value)
 	{
@@ -148,6 +177,7 @@ public class Nation implements Serializable
 		this.name = name;
 		money = 1.0d;
 		
+		armies = new ArrayList<>();
 		relations = new HashMap<>();
 		diplomacy = new HashMap<>();
 		storage = new HashMap<>();

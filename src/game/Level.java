@@ -13,6 +13,7 @@ import hud.HUD;
 import input.Keyboard;
 import input.Mouse;
 import main.Main;
+import misc.Defines;
 import misc.MouseBoxSelection;
 import misc.Settings;
 
@@ -23,15 +24,22 @@ public class Level implements Serializable
 	 */
 	private static final long serialVersionUID = -1115634716574780107L;
 	private World world;
-	private List<Nation> nations;
+	public List<Nation> nations;
 	private List<AI> ais;
 	public Nation player;
 	public static Calendar date;
 	private MouseBoxSelection mouseBoxSelection;
 	public static Tile selectedTile;
+	public Army selectedArmy;
 	public static int FRAMES_PER_HOUR = 10;
 	public static int HOURS_PER_FRAME = 1;
+	private Vector3f mouseWorldPos;
 	private int hour, day;
+	
+	public Vector3f getMouseWorldPos()
+	{
+		return mouseWorldPos;
+	}
 	
 	public World getWorld()
 	{
@@ -98,12 +106,23 @@ public class Level implements Serializable
 		List<Model> models = Renderer.provinces.stream()
 									.map(Tile::getModel)
 									.collect(Collectors.toList());
+		for(int i = 0; i < nations.size(); i++)
+			for(int j = 0; j < nations.get(i).getUnits().size(); j++)
+				models.add(nations.get(i).getUnits().get(j).getSprite().getModel());
 		if(Mouse.isLeftButtonReleased() && !HUD.menuOpen && !HUD.buttonClicked)
 		{
 			mouseBoxSelection.selectModel(models, Main.window, Mouse.getMousePosition(), 
 			Main.camera);
 		}
-			
+		if(selectedArmy != null && selectedArmy.getOwner() == player)
+		{
+			Vector3f targetPos = MouseBoxSelection.getMouseWorldPos(0, 0, 0, world.getWidth() * Defines.tileWidth, world.getHeight() * Defines.tileHeight
+					, 0.00001f);
+			if(targetPos.z == 0.00001f)
+			{
+				selectedArmy.moveTo(targetPos);
+			}
+		}
 		if(Mouse.isRightButtonReleased() && selectedTile != null  && !HUD.menuOpen && !HUD.buttonClicked)
 		{
 			selectedTile.getModel().setSelected(false);

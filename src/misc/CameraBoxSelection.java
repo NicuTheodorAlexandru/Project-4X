@@ -28,6 +28,16 @@ public class CameraBoxSelection implements Serializable
 		selectModel(models, camera.getPosition(), dir);
 	}
 	
+	protected static Vector3f getMouseWorldPos(float x, float y, float z, float width, float height, float length, Vector3f center, Vector3f dir)
+	{
+		float amount = (z - center.z) / dir.z;
+		float xx = center.x + amount * dir.x;
+		float yy = center.y + amount * dir.y;
+		float zz = center.z + amount * dir.z;
+		
+		return new Vector3f(xx, yy, zz);
+	}
+	
 	protected void selectModel(List<Model> models, Vector3f center, Vector3f dir)
 	{
 		Model selectedModel = null;

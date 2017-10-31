@@ -1,6 +1,8 @@
 package game;
 
 import java.io.Serializable;
+
+import main.Main;
 import misc.Defines;
 
 public class World implements Serializable
@@ -99,6 +101,11 @@ public class World implements Serializable
 				tiles[i][j].updateOnHour();
 			}
 		}
+		for(int i = 0; i < Main.level.nations.size(); i++)
+			for(int j = 0; j < Main.level.nations.get(i).getArmies().size(); j++)
+			{
+				Main.level.nations.get(i).getArmies().get(j).update();
+			}
 	}
 	
 	public void update()
@@ -123,6 +130,7 @@ public class World implements Serializable
 				tiles[i][j].render();
 			}
 		}
+		for(int i = 0; i < ;)
 		market.render();
 	}
 	

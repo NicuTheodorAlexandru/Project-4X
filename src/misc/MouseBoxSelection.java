@@ -1,5 +1,6 @@
 package misc;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
@@ -19,10 +20,10 @@ public class MouseBoxSelection extends CameraBoxSelection
 	 * 
 	 */
 	private static final long serialVersionUID = -6068318501333708770L;
-	private final Matrix4f invProjectionMatrix;
-	private final Matrix4f invViewMatrix;
-	private final Vector3f mouseDir;
-	private final Vector4f tmpVec;
+	private static Matrix4f invProjectionMatrix;
+	private static Matrix4f invViewMatrix;
+	private static Vector3f mouseDir;
+	private static Vector4f tmpVec;
 	
 	public static Vector3f getPos()
 	{
@@ -51,6 +52,34 @@ public class MouseBoxSelection extends CameraBoxSelection
 		pos.z += worldRay.z * distance;
 		
 		return pos;
+	}
+	
+	public static Vector3f getMouseWorldPos(float x, float y, float z, float width, float height,  float length)
+	{
+		int wdwWidth = Main.window.getWindowWidth();
+		int wdwHeight = Main.window.getWindowHeight();
+		
+		float xx = (float)(2 * Mouse.getDisplayVec().x) / (float)wdwWidth - 1.0f;
+        float yy = 1.0f - (float)(2 * Mouse.getDisplayVec().y) / (float)wdwHeight;
+        float zz = -1.0f;
+        
+        //
+        invProjectionMatrix.set(Renderer.projectionMatrix);
+        invProjectionMatrix.invert();
+        
+        tmpVec.set(x, y, z, 1.0f);
+        tmpVec.mul(invProjectionMatrix);
+        tmpVec.z = -1.0f;
+        tmpVec.w = 0.0f;
+        
+        Matrix4f viewMatrix = Renderer.viewMatrix;
+        invViewMatrix.set(viewMatrix);
+        invViewMatrix.invert();
+        tmpVec.mul(invViewMatrix);
+        
+        mouseDir.set(tmpVec.x, tmpVec.y, tmpVec.z);
+        
+        return getMouseWorldPos(x, y, z, width, height, length, Main.camera.getPosition(), mouseDir);
 	}
 	
 	public void selectModel(List<Model> models, Window window, Vector2d mousePos, Camera camera)
