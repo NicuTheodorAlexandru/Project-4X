@@ -107,8 +107,8 @@ public class Level implements Serializable
 									.map(Tile::getModel)
 									.collect(Collectors.toList());
 		for(int i = 0; i < nations.size(); i++)
-			for(int j = 0; j < nations.get(i).getUnits().size(); j++)
-				models.add(nations.get(i).getUnits().get(j).getSprite().getModel());
+			for(int j = 0; j < nations.get(i).getArmies().size(); j++)
+				models.add(nations.get(i).getArmies().get(j).getSprite().getModel());
 		if(Mouse.isLeftButtonReleased() && !HUD.menuOpen && !HUD.buttonClicked)
 		{
 			mouseBoxSelection.selectModel(models, Main.window, Mouse.getMousePosition(), 
@@ -132,6 +132,16 @@ public class Level implements Serializable
 		{
 			selectedTile.getModel().setSelected(false);
 			selectedTile = null;
+		}
+		if(Mouse.isLeftButtonReleased() && selectedArmy != null && !HUD.menuOpen && !HUD.buttonClicked)
+		{
+			selectedArmy.getSprite().getModel().setSelected(false);
+			selectedArmy = null;
+		}
+		if(Keyboard.getKeyReleased(Settings.keyExit) && selectedArmy != null)
+		{
+			selectedArmy.getSprite().getModel().setSelected(false);
+			selectedArmy = null;
 		}
 		//cameraBoxSelection.selectModel(models, Main.camera);
 		date.update();

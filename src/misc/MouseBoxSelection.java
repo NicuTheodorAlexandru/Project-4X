@@ -1,12 +1,10 @@
 package misc;
 
-import java.util.ArrayList;
 import java.util.List;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-
 import graphics.Camera;
 import graphics.Model;
 import graphics.Renderer;
@@ -67,7 +65,7 @@ public class MouseBoxSelection extends CameraBoxSelection
         invProjectionMatrix.set(Renderer.projectionMatrix);
         invProjectionMatrix.invert();
         
-        tmpVec.set(x, y, z, 1.0f);
+        tmpVec.set(xx, yy, zz, 1.0f);
         tmpVec.mul(invProjectionMatrix);
         tmpVec.z = -1.0f;
         tmpVec.w = 0.0f;

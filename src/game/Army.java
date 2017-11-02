@@ -2,11 +2,8 @@ package game;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.joml.Vector3f;
-
 import graphics.Sprite;
-import input.Keyboard;
 import input.Mouse;
 import main.Main;
 
@@ -18,6 +15,11 @@ public class Army
 	private Nation owner;
 	private float speed;
 	private boolean selected;
+	
+	public Sprite getSprite()
+	{
+		return units.get(0).getSprite();
+	}
 	
 	public void moveTo(Vector3f target)
 	{
@@ -64,8 +66,25 @@ public class Army
 	
 	public void update()
 	{
+		if(units.get(0).getSprite().getModel().getSelected())
+		{
+			selected = true;
+			Main.level.selectedArmy = this;
+		}
+	}
+	
+	public void updateOnDay()
+	{
+		for(Unit unit: units)
+		{
+			unit.reinforce();
+			unit.maintenance();
+		}
+	}
+	
+	public void updateOnHour()
+	{
 		Sprite sprite = units.get(0).getSprite();
-		selected = sprite.getModel().getSelected();
 		if(selected)
 		{
 			if(Mouse.isLeftButtonReleased())

@@ -104,7 +104,7 @@ public class World implements Serializable
 		for(int i = 0; i < Main.level.nations.size(); i++)
 			for(int j = 0; j < Main.level.nations.get(i).getArmies().size(); j++)
 			{
-				Main.level.nations.get(i).getArmies().get(j).update();
+				Main.level.nations.get(i).getArmies().get(j).updateOnHour();
 			}
 	}
 	
@@ -117,7 +117,11 @@ public class World implements Serializable
 				tiles[i][j].update();
 			}
 		}
-		
+		for(int i = 0; i < Main.level.nations.size(); i++)
+			for(int j = 0; j < Main.level.nations.get(i).getArmies().size(); j++)
+			{
+				Main.level.nations.get(i).getArmies().get(j).update();
+			}
 		market.update();
 	}
 	
@@ -130,7 +134,9 @@ public class World implements Serializable
 				tiles[i][j].render();
 			}
 		}
-		for(int i = 0; i < ;)
+		for(int i = 0; i < Main.level.nations.size(); i++)
+			for(int j = 0; j < Main.level.nations.get(i).getArmies().size(); j++)
+				Main.level.nations.get(i).getArmies().get(j).render();
 		market.render();
 	}
 	
