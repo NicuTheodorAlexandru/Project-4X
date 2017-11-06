@@ -18,6 +18,11 @@ public class Unit implements Serializable
 	private float dailyMaintenance;
 	private int maxManpower, manpower;
 	
+	public int getMaxManpower()
+	{
+		return maxManpower;
+	}
+	
 	public float getRange()
 	{
 		return range;

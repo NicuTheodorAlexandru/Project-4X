@@ -1,11 +1,9 @@
-/hud/
-/images/
-/misc/
-/World/
-/world/
+/graphics/
 /gui/
-/game/
-/buildings/
+/hud/
+/input/
 /main/
 /menu/
-/saves/
+/misc/
+/game/
+/buildings/

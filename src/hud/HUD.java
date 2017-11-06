@@ -28,12 +28,13 @@ public class HUD
 	private guiButton saveGameButton;
 	private guiButton buildFactoryButton;
 	private guiButton openDiplomacy;
+	private guiButton recruitArmy;
 	private guiTooltip profit;
 	private Diplomacy diplomacy;
 	private Text provincePopulation;
 	private Text provinceResource;
 	private Text money;
-	private Text resources;
+	private Text manpower;
 	private float exMoney;
 	private float exexMoney;
 	
@@ -73,6 +74,8 @@ public class HUD
 					provincePopulation = new Text(0.0f, Main.window.getWindowHeight() - 20.0f, p);
 					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 80.0f, 
 							new guiSprite(Assets.imgBuild));
+					recruitArmy = new guiButton(0.0f, Main.window.getWindowHeight() - 160.0f, 
+							new guiSprite(Assets.imgRecruit));
 					if(Level.selectedTile.getOwner() != Main.level.player)
 						openDiplomacy = new guiButton(0.0f, Main.window.getWindowHeight() - 120.0f, 
 								new guiSprite(Assets.imgDiplomacy));
@@ -187,22 +190,6 @@ public class HUD
 				menuOpen = true;
 			}
 		}
-		if(resources == null)
-		{
-			String tmp  = "";
-			tmp += "Population: " + String.valueOf(Main.level.player.getPopulation() + " ");
-			tmp += "Food: " + String.format("%.3f", Main.level.player.getStockpile("Food")) + "t ";
-			tmp += "Wood: " + String.format("%.3f", Main.level.player.getStockpile("Wood")) + "t ";
-			resources = new Text(100.0f, 0.0f, tmp);
-		}
-		else
-		{
-			String tmp  = "";
-			tmp += "Population: " + String.valueOf(Main.level.player.getPopulation()) + " ";
-			tmp += "Food: " + String.format("%.3f", Main.level.player.getStockpile("Food")) + "t ";
-			tmp += "Wood: " + String.format("%.3f", Main.level.player.getStockpile("Wood")) + "t ";
-			resources.setText(tmp);
-		}
 		if(money == null)
 		{
 			String m = "" + String.format("%.2f", Main.level.player.getMoney()) + "$";
@@ -212,6 +199,16 @@ public class HUD
 		{
 			String m = "" + String.format("%.2f", Main.level.player.getMoney()) + "$";
 			money.setText(m);
+		}
+		if(manpower == null)
+		{
+			String m = "Manpower: " + Integer.toString(Main.level.player.getManpower());
+			manpower = new Text(100.0f, 0.0f, m);
+		}
+		else
+		{
+			String m = "Manpower: " + Integer.toString(Main.level.player.getManpower());
+			manpower.setText(m);
 		}
 		if(profit == null)
 		{
@@ -271,6 +268,15 @@ public class HUD
 				}
 			}
 		}
+		if(recruitArmy != null)
+		{
+			if(Level.selectedTile == null || Level.selectedTile.getOwner() != Main.level.player)
+				recruitArmy = null;
+			else
+			{
+				recruitArmy.update();
+			}
+		}
 		if(openDiplomacy != null)
 		{
 			if(Level.selectedTile == null || Level.selectedTile.getOwner() == Main.level.player)
@@ -319,6 +325,8 @@ public class HUD
 		resourceList.render();
 		if(buildMenu != null)
 			buildMenu.render();
+		if(recruitArmy != null)
+			recruitArmy.render();
 		if(buildFactoryButton != null)
 			buildFactoryButton.render();
 		if(saveGameButton != null)
@@ -327,10 +335,10 @@ public class HUD
 			resumeGameButton.render();
 		if(exitGameButton != null)
 			exitGameButton.render();
-		if(resources != null)
-			resources.render();
 		if(money != null)
 			money.render();
+		if(manpower != null)
+			manpower.render();
 		if(provinceResource != null)
 			provinceResource.render();
 		if(colonizeButton != null)

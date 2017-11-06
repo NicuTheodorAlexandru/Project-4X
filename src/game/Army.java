@@ -16,6 +16,26 @@ public class Army
 	private float speed;
 	private boolean selected;
 	
+	public int getManpower()
+	{
+		int manpower = 0;
+		
+		for(Unit u: units)
+			manpower += u.getManpower();
+		
+		return manpower;
+	}
+	
+	public int getMaxManpower()
+	{
+		int maxManpower = 0;
+		
+		for(Unit u: units)
+			maxManpower += u.getMaxManpower();
+		
+		return maxManpower;
+	}
+	
 	public Sprite getSprite()
 	{
 		return units.get(0).getSprite();

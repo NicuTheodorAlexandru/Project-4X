@@ -25,10 +25,20 @@ public class Nation implements Serializable
 	private HashMap<String, Integer> relations;
 	private HashMap<String, String> diplomacy;
 	private List<Army> armies;
+	private List<Tile> tiles;
 	private long tag;
 	private double money;
 	private int population;
 	private int manpower;
+	
+	public void recruitArmy(Army army)
+	{
+		int amount = army.getMaxManpower();
+		for(Tile t: tiles)
+		{
+			if(t)
+		}
+	}
 	
 	public List<Army> getArmies()
 	{

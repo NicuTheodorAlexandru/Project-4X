@@ -12,6 +12,7 @@ public class Assets
 {
 	//GUI sprites
 	public static int imgBuild;
+	public static int imgRecruit;
 	public static int imgDiplomacy;
 	//text defines
 	public static String charset = "ISO-8859-1";
@@ -55,6 +56,7 @@ public class Assets
 		//images
 		imgBuild = Utils.getNanoVGImage("/images/sprBuild.png", 16 * 1024);
 		imgDiplomacy = Utils.getNanoVGImage("/images/sprDiplomacy.png", 64 * 1024);
+		imgRecruit = Utils.getNanoVGImage("/images/sprRecruit.png", 32 * 1024);
 	}
 	
 	public static void init()

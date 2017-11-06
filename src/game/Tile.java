@@ -35,6 +35,20 @@ public class Tile implements Serializable
 	private int numberOfFarms, numberOfWoodcutters;
 	private int numberOfFoodStorages, numberOfWoodStorages;
 	
+	public int getPops(String job)
+	{
+		int amount = 0;
+		
+		for(Population p: pops)
+		{
+			if(p.getCulture() != owner.getCulture() || p.getJob() != job)
+				continue;
+			amount += (int)p.getAmount();
+		}
+		
+		return amount;
+	}
+	
 	public int getNumberOfWoodStorage()
 	{
 		return numberOfWoodStorages;
