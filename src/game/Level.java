@@ -69,18 +69,24 @@ public class Level implements Serializable
 	public void render()
 	{
 		world.render();
+		for(Nation n: nations)
+			n.render();
 		date.render();
 	}
 	
 	public void updateOnDay()
 	{
 		world.updateOnDay();
+		for(Nation n: nations)
+			n.updateOnDay();
 		Main.hud.updateOnDay();
 	}
 	
 	public void updateOnHour()
 	{
 		world.updateOnHour();
+		for(Nation n: nations)
+			n.updateOnHour();
 		Main.hud.updateOnHour();
 	}
 	

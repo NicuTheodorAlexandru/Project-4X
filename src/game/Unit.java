@@ -85,11 +85,13 @@ public class Unit implements Serializable
 		owner.changeMoney(money);
 	}
 	
-	public void reinforce()
+	public int reinforce(int amount)
 	{
+		int a = amount;
 		if(manpower < maxManpower)
 		{
-			int amount = reinforceRate;
+			if(amount > reinforceRate)
+				amount = reinforceRate;
 			if(amount > maxManpower - manpower)
 				amount = maxManpower - manpower;
 			if(amount > owner.getManpower())
@@ -98,6 +100,7 @@ public class Unit implements Serializable
 			owner.changeMoney(money);
 			manpower += amount;
 		}
+		return (a - amount);
 	}
 	
 	public void render()
@@ -114,7 +117,7 @@ public class Unit implements Serializable
 		this.defense = defense;
 		this.range = range;
 		this.maxManpower = maxManpower;
-		manpower = maxManpower;
+		manpower = 0;
 		this.maxMorale = maxMorale;
 		this.speed = speed;
 		moraleRegen = maxMorale / maxManpower;

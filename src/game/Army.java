@@ -16,6 +16,32 @@ public class Army
 	private float speed;
 	private boolean selected;
 	
+	public void reinforce(List<Tile> tiles)
+	{
+		for(int j = 0; j < tiles.size() && getManpower() < getMaxManpower() ; j++)
+		{
+			if(tiles.get(j).getOwner() != owner)
+				continue;
+			Population pop;
+			for(int i = 0; i < tiles.get(j).getPops().size() && getManpower() < getMaxManpower(); i++)
+			{
+				pop = tiles.get(j).getPops().get(i);
+				if(pop.getJob() != "Soldier")
+					continue;
+				int amount = (int)pop.getAmount();
+				pop.change(-amount);
+				for(int k = 0; k < units.size() && amount > 0; k++)
+					if(units.get(k).getManpower() < units.get(k).getMaxManpower())
+					{
+						int a = units.get(k).reinforce(amount);
+						amount -= a;
+						
+					}
+				pop.change(amount);
+			}
+		}
+	}
+	
 	public int getManpower()
 	{
 		int manpower = 0;
@@ -97,7 +123,7 @@ public class Army
 	{
 		for(Unit unit: units)
 		{
-			unit.reinforce();
+			reinforce(Main.level.getWorld().listTiles);
 			unit.maintenance();
 		}
 	}

@@ -7,7 +7,6 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
-
 import main.Main;
 
 public class TextItem

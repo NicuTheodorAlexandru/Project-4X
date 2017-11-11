@@ -1,6 +1,8 @@
 package game;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import main.Main;
 import misc.Defines;
@@ -11,7 +13,8 @@ public class World implements Serializable
 	 * 
 	 */
 	private static final long serialVersionUID = -3379923225982945931L;
-	private Tile[][] tiles;
+	public Tile[][] tiles;
+	public List<Tile> listTiles;
 	private int widthTiles, heightTiles;
 	public static Market market;
 	
@@ -50,6 +53,7 @@ public class World implements Serializable
 			for(int j = 0; j < heightTiles; j++)
 			{
 				tiles[i][j] = new Tile(i * Defines.tileWidth, j * Defines.tileHeight);
+				listTiles.add(tiles[i][j]);
 			}
 		}
 		for(int i = 0; i < widthTiles; i++)
@@ -144,6 +148,7 @@ public class World implements Serializable
 	{
 		this.widthTiles = widthTiles;
 		this.heightTiles = heightTiles;
+		listTiles = new ArrayList<>();
 		tiles = new Tile[widthTiles][heightTiles];
 		generateWorld(widthTiles, heightTiles);
 		market = new Market();

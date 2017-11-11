@@ -31,13 +31,52 @@ public class Nation implements Serializable
 	private int population;
 	private int manpower;
 	
+	public void addTiles(Tile t)
+	{
+		tiles.add(t);
+	}
+	
+	public void render()
+	{
+		for(Army a: armies)
+			a.render();
+	}
+	
+	public void updateOnDay()
+	{
+		for(Army a: armies)
+			a.updateOnDay();
+	}
+	
+	public void updateOnHour()
+	{
+		for(Army a: armies)
+			a.updateOnHour();
+	}
+	
 	public void recruitArmy(Army army)
 	{
-		int amount = army.getMaxManpower();
 		for(Tile t: tiles)
 		{
-			if(t)
+			for(int i = 0; i < t.getPops().size(); i++)
+			{
+				Population pop = t.getPops().get(i);
+				if(pop.getJob() != "Soldier")
+					continue;
+				int amount = (int)pop.getAmount();
+				if(amount > 0)
+				{
+					if(amount > army.getMaxManpower() - army.getManpower())
+						amount = army.getMaxManpower() - army.getManpower();
+					t.changePopulation(new Population(pop.getCulture(), pop.getReligion(), pop.getJob(), -amount));
+					amount  -= army.getUnits().get(0).reinforce(amount);
+					t.changePopulation(new Population(pop.getCulture(), pop.getReligion(), pop.getJob(), amount));
+				}
+				if(army.getManpower() == army.getMaxManpower())
+					break;
+			}
 		}
+		armies.add(army);
 	}
 	
 	public List<Army> getArmies()
@@ -45,19 +84,9 @@ public class Nation implements Serializable
 		return armies;
 	}
 	
-	public int changeManpower(int amount)
+	public void changeManpower(int amount)
 	{
-		if(amount >= manpower)
-		{
-			manpower -= amount;
-			return amount;
-		}
-		else
-		{
-			amount = manpower;
-			manpower = 0;
-			return amount;
-		}
+		manpower += amount;
 	}
 	
 	public int getManpower()
@@ -187,6 +216,7 @@ public class Nation implements Serializable
 		this.name = name;
 		money = 1.0d;
 		
+		tiles = new ArrayList<>();
 		armies = new ArrayList<>();
 		relations = new HashMap<>();
 		diplomacy = new HashMap<>();

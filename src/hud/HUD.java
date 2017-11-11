@@ -1,9 +1,15 @@
 package hud;
 
+import org.joml.Vector3f;
+
+import game.Army;
 import game.Level;
 import game.Nation;
 import game.SaveGame;
+import game.Unit;
+import graphics.Sprite;
 import graphics.Text;
+import graphics.Texture;
 import gui.guiBuildMenu;
 import gui.guiButton;
 import gui.guiResourceList;
@@ -34,6 +40,7 @@ public class HUD
 	private Text provincePopulation;
 	private Text provinceResource;
 	private Text money;
+	private Text population;
 	private Text manpower;
 	private float exMoney;
 	private float exexMoney;
@@ -74,11 +81,14 @@ public class HUD
 					provincePopulation = new Text(0.0f, Main.window.getWindowHeight() - 20.0f, p);
 					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 80.0f, 
 							new guiSprite(Assets.imgBuild));
-					recruitArmy = new guiButton(0.0f, Main.window.getWindowHeight() - 160.0f, 
-							new guiSprite(Assets.imgRecruit));
 					if(Level.selectedTile.getOwner() != Main.level.player)
 						openDiplomacy = new guiButton(0.0f, Main.window.getWindowHeight() - 120.0f, 
 								new guiSprite(Assets.imgDiplomacy));
+					else
+					{
+						recruitArmy = new guiButton(0.0f, Main.window.getWindowHeight() - 160.0f, 
+								new guiSprite(Assets.imgRecruit));
+					}
 				}
 			}
 		}
@@ -200,10 +210,20 @@ public class HUD
 			String m = "" + String.format("%.2f", Main.level.player.getMoney()) + "$";
 			money.setText(m);
 		}
+		if(population == null)
+		{
+			String m = "Population: " + Integer.toString(Main.level.player.getPopulation());
+			population = new Text(100.0f, 0.0f, m);
+		}
+		else
+		{
+			String m = "Population: " + Integer.toString(Main.level.player.getPopulation());
+			population.setText(m);
+		}
 		if(manpower == null)
 		{
 			String m = "Manpower: " + Integer.toString(Main.level.player.getManpower());
-			manpower = new Text(100.0f, 0.0f, m);
+			manpower = new Text(400.0f, 0.0f, m);
 		}
 		else
 		{
@@ -246,7 +266,7 @@ public class HUD
 			else
 			{
 				float pop = (int)Level.selectedTile.getPopulation();
-				String p = "" + (int)pop;
+				String p = "Population " + (int)pop;
 				provincePopulation.setText(p);
 			}
 		}
@@ -275,6 +295,13 @@ public class HUD
 			else
 			{
 				recruitArmy.update();
+				if(recruitArmy.getActivated())
+				{
+					Unit u = new Unit(Main.level.player, new Sprite(new Texture("/images/sprInfantry.png")), 1.0f, 0.0f, 1.0f, 10, 10, 0.01f, 0.0f);
+					u.getSprite().getModel().setPosition(new Vector3f(Level.selectedTile.getModel().getPosition()));
+					u.getSprite().getModel().setPosition(new Vector3f(5.0f, 5.0f, -1.0f));
+					Main.level.player.recruitArmy(new Army(u));
+				}
 			}
 		}
 		if(openDiplomacy != null)
@@ -335,6 +362,8 @@ public class HUD
 			resumeGameButton.render();
 		if(exitGameButton != null)
 			exitGameButton.render();
+		if(population != null)
+			population.render();
 		if(money != null)
 			money.render();
 		if(manpower != null)

@@ -41,7 +41,7 @@ public class Tile implements Serializable
 		
 		for(Population p: pops)
 		{
-			if(p.getCulture() != owner.getCulture() || p.getJob() != job)
+			if(p.getJob() != job)
 				continue;
 			amount += (int)p.getAmount();
 		}
@@ -192,6 +192,7 @@ public class Tile implements Serializable
 			return;
 		this.changeOwner(nation);
 		
+		nation.addTiles(this);
 		changePopulation(new Population(nation.getCulture(), nation.getReligion(), "Unemployed", 2.0d));
 	}
 	
@@ -227,12 +228,16 @@ public class Tile implements Serializable
 				double tmp = p.getAmount();
 				p.change(pop.getAmount());
 				owner.changePopulation(((int)p.getAmount() - (int)tmp));
+				if(pop.getJob() == "Soldier")
+					owner.changeManpower(((int)p.getAmount() - (int)tmp));
 			}
 		}
 		if(!exists)
 		{
 			pops.add(pop);
 			owner.changePopulation((int)pop.getAmount());
+			if(pop.getJob() == "Soldier")
+				owner.changeManpower((int)pop.getAmount());
 		}
 	}
 	
@@ -263,7 +268,7 @@ public class Tile implements Serializable
 		for(int i = 0; i < pops.size(); i++)
 		{
 			Population pop = pops.get(i);
-			double temp = pop.getAmount() * populationGrowth / 720;//720;
+			double temp = pop.getAmount() * populationGrowth / 10;//720;
 			changePopulation(new Population(pop.getCulture(), pop.getReligion(), "Unemployed", temp));
 		}
 	}
@@ -369,6 +374,30 @@ public class Tile implements Serializable
 		}
 	}
 	
+	private void recruit()
+	{
+		int amount = this.getPops("Soldier");
+		int a = (int)this.getPopulation() / 10;
+		int hire = a - amount;
+		if(hire > 0)
+		{
+			for(int i = 0; i < pops.size(); i++)
+			{
+				Population pop = pops.get(i);
+				if(pop.getJob() != "Unemployed")
+					continue;
+				int aa = hire;
+				if(hire > pop.getAmount())
+					aa = (int)pop.getAmount();
+				this.changePopulation(new Population(pop.getCulture(), pop.getReligion(), "Unemployed", -aa));
+				this.changePopulation(new Population(pop.getCulture(), pop.getReligion(), "Soldier", aa));
+				hire -= aa;
+				if(hire <= 0)
+					break;
+			}
+		}
+	}
+	
 	public void updateOnDay()
 	{
 		if(owner != null)
@@ -383,6 +412,7 @@ public class Tile implements Serializable
 			
 			feedPopulation();
 			popGrowth();
+			recruit();
 		}
 	}
 	
