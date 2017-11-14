@@ -22,6 +22,6 @@ void main()
 	}
 	if(selected == 1)
 	{
-		fragColor = vec4(fragColor.x, fragColor.y, fragColor.z, 0.9);
+		fragColor = vec4(fragColor.x, fragColor.y, fragColor.z, 0.8);
 	}
 }

@@ -1,6 +1,8 @@
 package game;
 
 import java.io.Serializable;
+
+import graphics.Renderer;
 import graphics.Sprite;
 
 public class Unit implements Serializable
@@ -105,7 +107,7 @@ public class Unit implements Serializable
 	
 	public void render()
 	{
-		sprite.render();
+		Renderer.models.add(sprite.getModel());
 	}
 	
 	public Unit(Nation owner, Sprite sprite, float damage, float defense, float range, int maxManpower, float maxMorale, float speed, 
@@ -121,5 +123,6 @@ public class Unit implements Serializable
 		this.maxMorale = maxMorale;
 		this.speed = speed;
 		moraleRegen = maxMorale / maxManpower;
+		this.sprite.getModel().setZ(-0.1f);
 	}
 }

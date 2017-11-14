@@ -299,7 +299,8 @@ public class HUD
 				{
 					Unit u = new Unit(Main.level.player, new Sprite(new Texture("/images/sprInfantry.png")), 1.0f, 0.0f, 1.0f, 10, 10, 0.01f, 0.0f);
 					u.getSprite().getModel().setPosition(new Vector3f(Level.selectedTile.getModel().getPosition()));
-					u.getSprite().getModel().setPosition(new Vector3f(5.0f, 5.0f, -1.0f));
+					u.getSprite().getModel().setZ(-0.1f);
+					//u.getSprite().getModel().setPosition(new Vector3f(5.0f, 5.0f, -1.0f));
 					Main.level.player.recruitArmy(new Army(u));
 				}
 			}

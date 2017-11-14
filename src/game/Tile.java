@@ -336,6 +336,7 @@ public class Tile implements Serializable
 		}
 		sprite.getModel().setX(this.x);
 		sprite.getModel().setY(this.y);
+		sprite.getModel().setZ(0.0f);
 	}
 	
 	public Tile(float x, float y)

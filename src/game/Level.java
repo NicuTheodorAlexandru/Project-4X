@@ -109,7 +109,8 @@ public class Level implements Serializable
 	public void update()
 	{
 		updateSpeed();
-		List<Model> models = Renderer.provinces.stream()
+		List<Model> models = new ArrayList<>();
+		models = Renderer.provinces.stream()
 									.map(Tile::getModel)
 									.collect(Collectors.toList());
 		for(int i = 0; i < nations.size(); i++)
@@ -123,8 +124,8 @@ public class Level implements Serializable
 		if(selectedArmy != null && selectedArmy.getOwner() == player)
 		{
 			Vector3f targetPos = MouseBoxSelection.getMouseWorldPos(0, 0, 0, world.getWidth() * Defines.tileWidth, world.getHeight() * Defines.tileHeight
-					, 0.00001f);
-			if(targetPos.z == 0.00001f)
+					, -1.0f);
+			if(targetPos.z == -1.0f)
 			{
 				selectedArmy.moveTo(targetPos);
 			}

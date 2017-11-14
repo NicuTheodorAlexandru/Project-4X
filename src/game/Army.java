@@ -94,7 +94,7 @@ public class Army
 		if(army.getOwner() == owner)
 		{
 			for(Unit u: army.getUnits())
-				u.getSprite().getModel().setPosition(new Vector3f(pos));
+				u.getSprite().getModel().setPosition(new Vector3f(pos.x, pos.y, -0.1f));
 			units.addAll(army.getUnits());
 			army.getUnits().clear();
 		}
@@ -117,6 +117,15 @@ public class Army
 			selected = true;
 			Main.level.selectedArmy = this;
 		}
+		else
+		{
+			if(Mouse.isLeftButtonReleased())
+			{
+				selected = false;
+				Main.level.selectedArmy = null;
+			}
+		}
+		
 	}
 	
 	public void updateOnDay()

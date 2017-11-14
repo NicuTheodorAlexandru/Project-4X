@@ -170,8 +170,8 @@ public class Renderer
 		projectionMatrix = new Matrix4f(transformation.getProjectionMatrix(FOV, Main.window.getWindowWidth(), 
 				Main.window.getWindowHeight(), Z_NEAR, Z_FAR));
 		viewMatrix = transformation.getViewMatrix(Main.camera, viewMatrix);
-		renderModels();
 		renderProvinces();
+		renderModels();
 		renderHUD();
 	}
 	

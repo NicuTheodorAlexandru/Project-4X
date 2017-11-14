@@ -1,3 +1,5 @@
+/buildings/
+/game/
 /graphics/
 /gui/
 /hud/
@@ -5,5 +7,4 @@
 /main/
 /menu/
 /misc/
-/game/
-/buildings/
+/shaders/
