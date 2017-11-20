@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 
 import graphics.Model;
@@ -121,14 +122,12 @@ public class Level implements Serializable
 			mouseBoxSelection.selectModel(models, Main.window, Mouse.getMousePosition(), 
 			Main.camera);
 		}
-		if(selectedArmy != null && selectedArmy.getOwner() == player)
+		if(selectedArmy != null && selectedArmy.getOwner() == player && Mouse.isRightButtonReleased())
 		{
-			Vector3f targetPos = MouseBoxSelection.getMouseWorldPos(0, 0, 0, world.getWidth() * Defines.tileWidth, world.getHeight() * Defines.tileHeight
+			Vector2f targetPos = MouseBoxSelection.getMouseWorldPos(0, 0, 0, world.getWidth() * Defines.tileWidth, world.getHeight() * Defines.tileHeight
 					, -1.0f);
-			if(targetPos.z == -1.0f)
-			{
-				selectedArmy.moveTo(targetPos);
-			}
+			Vector3f target = new Vector3f(targetPos.x, targetPos.y, -1.0f);
+			selectedArmy.moveTo(target);
 		}
 		if(Mouse.isRightButtonReleased() && selectedTile != null  && !HUD.menuOpen && !HUD.buttonClicked)
 		{

@@ -28,14 +28,23 @@ public class CameraBoxSelection implements Serializable
 		selectModel(models, camera.getPosition(), dir);
 	}
 	
-	protected static Vector3f getMouseWorldPos(float x, float y, float z, float width, float height, float length, Vector3f center, Vector3f dir)
+	protected static Vector2f getMouseWorldPos(float x, float y, float z, float width, float height, float length, Vector3f center, Vector3f dir)
 	{
-		float amount = (z - center.z) / dir.z;
-		float xx = center.x + amount * dir.x;
-		float yy = center.y + amount * dir.y;
-		float zz = center.z + amount * dir.z;
-		
-		return new Vector3f(xx, yy, zz);
+		Vector3f min = new Vector3f();
+		Vector3f max = new Vector3f();
+		min.x = Float.NEGATIVE_INFINITY;
+		min.y = Float.NEGATIVE_INFINITY;
+		min.z = -0.0001f;
+		max.x = Float.POSITIVE_INFINITY;
+		max.y = Float.POSITIVE_INFINITY;
+		max.z = 0.0001f;
+		Vector2f res = new Vector2f();
+		float dist = center.z;
+		Intersectionf.intersectRayAab(center, dir, min, max, res);
+		System.out.println(res);
+		res.x = center.x + dir.x * res.x;
+		res.y = center.y + dir.y * res.x;
+		return new Vector2f(res);
 	}
 	
 	protected void selectModel(List<Model> models, Vector3f center, Vector3f dir)
@@ -51,8 +60,11 @@ public class CameraBoxSelection implements Serializable
 			//
 			min.add(-model.getScale().x / 2, -model.getScale().y / 2, -model.getScale().z / 2);
 			max.add(model.getScale().x / 2, model.getScale().y / 2, model.getScale().z / 2);
-			if(max.z == 0)
-				max.z = 0.01f;
+			if(model.getScale().z == 0)
+			{
+				min.z -= 0.01f;
+				max.z += 0.01f;
+			}
 			if(Intersectionf.intersectRayAab(center, dir, min, max, nearFar) 
 					&& nearFar.x < closestDistance)
 			{

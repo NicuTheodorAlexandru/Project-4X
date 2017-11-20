@@ -70,6 +70,7 @@ public class Army
 	public void moveTo(Vector3f target)
 	{
 		targetPos = new Vector3f(target);
+		targetPos.z = pos.z;
 	}
 	
 	public Nation getOwner()
@@ -108,6 +109,7 @@ public class Army
 		targetPos = new Vector3f(pos);
 		owner = unit.getOwner();
 		selected = false;
+		speed = 0.01f;
 	}
 	
 	public void update()
@@ -151,40 +153,20 @@ public class Army
 		if(sprite.getModel().getPosition().x != targetPos.x)
 		{
 			float a = targetPos.x - sprite.getModel().getX();
-			if(a < 0)
-			{
-				a *= -1;
-				if(a < speed)
-					sprite.getModel().moveX(-a);
-				else
-					sprite.getModel().moveX(-speed);
-			}
-			else
-			{
-				if(a < speed)
-					sprite.getModel().moveX(a);
-				else
-					sprite.getModel().moveX(speed);
-			}
+			if(a > speed)
+				a = speed;
+			else if(a < -speed)
+				a = -speed;
+			sprite.getModel().moveX(a);
 		}
 		if(sprite.getModel().getPosition().y != targetPos.y)
 		{
 			float a = targetPos.y - sprite.getModel().getY();
-			if(a < 0)
-			{
-				a *= -1;
-				if(a < speed)
-					sprite.getModel().moveY(-a);
-				else
-					sprite.getModel().moveY(-speed);
-			}
-			else
-			{
-				if(a < speed)
-					sprite.getModel().moveY(a);
-				else
-					sprite.getModel().moveY(speed);
-			}
+			if(a > speed)
+				a = speed;
+			else if(a < -speed)
+				a = -speed;
+			sprite.getModel().moveY(a);
 		}
 	}
 	

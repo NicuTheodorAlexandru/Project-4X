@@ -3,6 +3,7 @@ package misc;
 import java.util.List;
 import org.joml.Matrix4f;
 import org.joml.Vector2d;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import graphics.Camera;
@@ -52,7 +53,7 @@ public class MouseBoxSelection extends CameraBoxSelection
 		return pos;
 	}
 	
-	public static Vector3f getMouseWorldPos(float x, float y, float z, float width, float height,  float length)
+	public static Vector2f getMouseWorldPos(float x, float y, float z, float width, float height,  float length)
 	{
 		int wdwWidth = Main.window.getWindowWidth();
 		int wdwHeight = Main.window.getWindowHeight();
@@ -87,7 +88,7 @@ public class MouseBoxSelection extends CameraBoxSelection
 		
 		float x = (float)(2 * mousePos.x) / (float)wdwWidth - 1.0f;
         float y = 1.0f - (float)(2 * mousePos.y) / (float)wdwHeight;
-        float z = -1.0f;
+        float z = -4.0f;
         
         //
         invProjectionMatrix.set(Renderer.projectionMatrix);
