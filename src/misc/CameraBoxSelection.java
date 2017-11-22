@@ -41,9 +41,8 @@ public class CameraBoxSelection implements Serializable
 		Vector2f res = new Vector2f();
 		float dist = center.z;
 		Intersectionf.intersectRayAab(center, dir, min, max, res);
-		System.out.println(res);
 		res.x = center.x + dir.x * res.x;
-		res.y = center.y + dir.y * res.x;
+		res.y = center.y + dir.y * res.y;
 		return new Vector2f(res);
 	}
 	
@@ -51,7 +50,6 @@ public class CameraBoxSelection implements Serializable
 	{
 		Model selectedModel = null;
 		float closestDistance = Float.POSITIVE_INFINITY;
-		
 		for(Model model: models)
 		{
 			model.setSelected(false);

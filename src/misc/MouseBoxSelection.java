@@ -30,7 +30,7 @@ public class MouseBoxSelection extends CameraBoxSelection
 		Matrix4f mat1 = new Matrix4f();
 		
 		float x = 1.0f - (2.0f * (float)Mouse.getMousePosition().x) / Main.window.getWindowWidth();
-		float y = 1.0f - (2.0f * (float)Mouse.getMousePosition().y ) / Main.window.getWindowHeight();
+		float y = 1.0f - (2.0f * (float)Mouse.getMousePosition().y) / Main.window.getWindowHeight();
 		float z = 1.0f;
 		Vector4f clipCoords = new Vector4f(x, y, z, 1.0f);
 		mat1.set(Renderer.projectionMatrix);
@@ -58,9 +58,9 @@ public class MouseBoxSelection extends CameraBoxSelection
 		int wdwWidth = Main.window.getWindowWidth();
 		int wdwHeight = Main.window.getWindowHeight();
 		
-		float xx = (float)(2 * Mouse.getDisplayVec().x) / (float)wdwWidth - 1.0f;
-        float yy = 1.0f - (float)(2 * Mouse.getDisplayVec().y) / (float)wdwHeight;
-        float zz = -1.0f;
+		float xx = (float)(2 * Mouse.getMousePosition().x) / (float)wdwWidth - 1.0f;
+        float yy = 1.0f - (float)(2 * Mouse.getMousePosition().y) / (float)wdwHeight;
+        float zz = -4.0f;
         
         //
         invProjectionMatrix.set(Renderer.projectionMatrix);

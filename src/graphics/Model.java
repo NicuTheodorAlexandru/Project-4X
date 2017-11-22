@@ -2,6 +2,8 @@ package graphics;
 
 import org.joml.Vector3f;
 
+import game.AABB;
+
 public class Model
 {
 	private Mesh mesh;
@@ -10,6 +12,17 @@ public class Model
 	private float size;
 	private Vector3f scale;
 	private boolean selected;
+	private AABB aabb;
+	
+	public boolean getCollision(Model other)
+	{
+		return aabb.collision(other.getCollisionBox());
+	}
+	
+	public AABB getCollisionBox()
+	{
+		return aabb;
+	}
 	
 	public void setMesh(Mesh mesh)
 	{
@@ -79,21 +92,22 @@ public class Model
 		position.x += pos.x;
 		position.y += pos.y;
 		position.z += pos.z;
+		aabb.update(position.x, position.y);
 	}
 	
 	public void moveZ(float value)
 	{
-		position.z += value;
+		movePosition(new Vector3f(0, 0, value));
 	}
 	
 	public void moveY(float value)
 	{
-		position.y += value;
+		movePosition(new Vector3f(0, value, 0));
 	}
 	
 	public void moveX(float value)
 	{
-		position.x += value;
+		movePosition(new Vector3f(value, 0, 0));
 	}
 	
 	public void setPosition(Vector3f pos)
@@ -151,5 +165,6 @@ public class Model
 		position = new Vector3f(0, 0, 0);
 		rotation = new Vector3f(0, 0, 0);
 		scale = new Vector3f(mesh.getLength());
+		aabb = new AABB(position.x, position.z, mesh.getLength().x, mesh.getLength().z);
 	}
 }

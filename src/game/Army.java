@@ -6,6 +6,7 @@ import org.joml.Vector3f;
 import graphics.Sprite;
 import input.Mouse;
 import main.Main;
+import misc.Defines;
 
 public class Army 
 {
@@ -13,8 +14,23 @@ public class Army
 	private Vector3f pos;
 	private Vector3f targetPos;
 	private Nation owner;
+	private Tile location;
 	private float speed;
 	private boolean selected;
+	private int siegeProgress;
+
+	private void siege()
+	{
+		if(location.getOwner().getDiplomacy(owner) == "War" && location.getController() == location.getOwner())
+		{
+			siegeProgress++;
+			if(siegeProgress >= 100)
+			{
+				siegeProgress = 0;
+				location.setController(owner);
+			}
+		}
+	}
 	
 	public void reinforce(List<Tile> tiles)
 	{
@@ -110,6 +126,18 @@ public class Army
 		owner = unit.getOwner();
 		selected = false;
 		speed = 0.01f;
+		int i = (int)(pos.x / Defines.tileWidth);
+		int j = (int)(pos.y / Defines.tileHeight);
+		if(i < 0)
+			i = 0;
+		else if(i >= Main.level.getWorld().getWidth())
+			i = Main.level.getWorld().getWidth() - 1;
+		if(j < 0)
+			j = 0;
+		else if(j >= Main.level.getWorld().getHeight())
+			j = Main.level.getWorld().getHeight() - 1;
+		location = Main.level.getWorld().getTile(i, j);
+		location.enterArmy(this);
 	}
 	
 	public void update()
@@ -168,6 +196,19 @@ public class Army
 				a = -speed;
 			sprite.getModel().moveY(a);
 		}
+		location.leaveArmy(this);
+		int i = (int)(sprite.getModel().getX() / Defines.tileWidth);
+		int j = (int)(sprite.getModel().getY() / Defines.tileHeight);
+		if(i < 0)
+			i = 0;
+		else if(i >= Main.level.getWorld().getWidth())
+			i = Main.level.getWorld().getWidth() - 1;
+		if(j < 0)
+			j = 0;
+		else if(j >= Main.level.getWorld().getHeight())
+			j = Main.level.getWorld().getHeight() - 1;
+		location = Main.level.getWorld().getTile(i, j);
+		location.enterArmy(this);
 	}
 	
 	public void render()

@@ -22,6 +22,7 @@ public class Tile implements Serializable
 	private List<Population> pops;
 	private List<Factory> factories;
 	private List<Storage> storages;
+	private List<Army> armies;
 	private transient Sprite sprite;
 	private String resourceType;
 	private String terrainType;
@@ -34,6 +35,34 @@ public class Tile implements Serializable
 	private float foodPerPop;
 	private int numberOfFarms, numberOfWoodcutters;
 	private int numberOfFoodStorages, numberOfWoodStorages;
+	private Nation controller;
+	
+	public void setController(Nation controller)
+	{
+		this.controller = controller;
+	}
+	
+	public Nation getController()
+	{
+		return controller;
+	}
+	
+	public List<Army> getArmies()
+	{
+		return armies;
+	}
+	
+	public void enterArmy(Army army)
+	{
+		if(!armies.contains(army))
+			armies.add(army);
+	}
+	
+	public void leaveArmy(Army army)
+	{
+		if(armies.contains(army))
+			armies.remove(army);
+	}
 	
 	public int getPops(String job)
 	{
@@ -344,6 +373,7 @@ public class Tile implements Serializable
 		numberOfFarms = numberOfWoodcutters = 0;
 		factories = new ArrayList<>();
 		storages = new ArrayList<>();
+		armies = new ArrayList<>();
 		resourceOutput = 0.0f;
 		populationGrowth = 1f;
 		productionPerPop = 0.0001f;
