@@ -155,7 +155,6 @@ public class Army
 				Main.level.selectedArmy = null;
 			}
 		}
-		
 	}
 	
 	public void updateOnDay()
@@ -165,6 +164,7 @@ public class Army
 			reinforce(Main.level.getWorld().listTiles);
 			unit.maintenance();
 		}
+		siege();
 	}
 	
 	public void updateOnHour()

@@ -36,6 +36,26 @@ public class Tile implements Serializable
 	private int numberOfFarms, numberOfWoodcutters;
 	private int numberOfFoodStorages, numberOfWoodStorages;
 	private Nation controller;
+	private Nation sieger;
+	private int siegeProgress;
+	private int lastSiegeProgress;
+	private int maxSiegeProgress;
+	
+	private void changeController(Nation nation)
+	{
+		this.controller = nation;
+	}
+	
+	public void addSiegeProgress(Army army)
+	{
+		sieger = army.getOwner();
+		siegeProgress++;
+	}
+	
+	public int getSiegeProgress()
+	{
+		return siegeProgress;
+	}
 	
 	public void setController(Nation controller)
 	{
@@ -220,7 +240,7 @@ public class Tile implements Serializable
 		else
 			return;
 		this.changeOwner(nation);
-		
+		this.changeController(nation);
 		nation.addTiles(this);
 		changePopulation(new Population(nation.getCulture(), nation.getReligion(), "Unemployed", 2.0d));
 	}
@@ -380,7 +400,9 @@ public class Tile implements Serializable
 		foodPerPop = 0.00005f;
 		owner = null;
 		pops = new ArrayList<>();
-		
+		controller = owner;
+		siegeProgress = lastSiegeProgress = 0;
+		maxSiegeProgress = 100;
 		this.x = x;
 		this.y = y;
 		terrainType = new String();
@@ -445,6 +467,17 @@ public class Tile implements Serializable
 			popGrowth();
 			recruit();
 		}
+		if(lastSiegeProgress != siegeProgress)
+		{
+			if(siegeProgress >= maxSiegeProgress)
+			{
+				this.changeController(sieger);
+				siegeProgress = 0;
+			}
+			lastSiegeProgress = siegeProgress;
+		}
+		else
+			lastSiegeProgress = siegeProgress = 0;
 	}
 	
 	public void update()
