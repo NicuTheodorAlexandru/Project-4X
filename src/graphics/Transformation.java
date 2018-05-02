@@ -44,6 +44,14 @@ public class Transformation
         return viewCurr.mul(modelViewMatrix);
     }
 	
+ 	public static Matrix4f updateGenericViewMatrix(Vector3f position, Vector3f rotation, Matrix4f matrix)
+ 	{
+ 		matrix.rotationX((float)Math.toRadians(rotation.x))
+		.rotateY((float)Math.toRadians(rotation.y))
+		.translate(-position.x, -position.y, -position.z);
+ 		return matrix;
+ 	}
+ 	
 	public Matrix4f getViewMatrix(Camera camera, Matrix4f viewMatrix)
 	{
 		Vector3f position = camera.getPosition();

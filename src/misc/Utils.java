@@ -1,6 +1,9 @@
 package misc;
 
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -14,73 +17,109 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
 import org.lwjgl.nanovg.NanoVG;
-import org.lwjgl.system.MemoryUtil;
-
+import game.Nation;
 import main.Main;
 
 public class Utils
 {	
+	public static String[] getAllFilenames(String path)
+	{
+		File folder = new File(path);
+		String[] filenames;
+		int length = folder.listFiles().length;
+		filenames = new String[length];
+		int index = 0;
+		for(File file: folder.listFiles())
+		{
+			filenames[index] = file.getName();
+			index++;
+		}
+		return filenames;
+	}
+	
+	public static Nation getNationFromFile(String filename)
+	{
+		filename = "src/nations/" + filename;
+		Nation n = null;
+		String name, adjective, religion;
+		Vector3f color = new Vector3f();
+		Scanner s = null;
+		name = adjective = religion = "";
+		try
+		{
+			s = new Scanner(new FileReader(filename));
+			name = s.nextLine();
+			adjective = s.nextLine();
+			religion = s.nextLine();
+			color.x = s.nextFloat();
+			color.y = s.nextFloat();
+			color.z = s.nextFloat();
+			s.close();
+		} catch (FileNotFoundException e)
+		{
+			System.err.println(e);
+		}
+		if(!name.equals("") && !adjective.equals("") && !religion.equals(""))
+			n = new Nation(name, adjective, religion, color);
+		return n;
+	}
+	
 	private static ByteBuffer resizeBuffer(ByteBuffer buffer, int newCapacity) 
 	{
-        ByteBuffer newBuffer = MemoryUtil.memAlloc(newCapacity);
+        ByteBuffer newBuffer = BufferUtils.createByteBuffer(newCapacity);
         buffer.flip();
         newBuffer.put(buffer);
-        MemoryUtil.memFree(buffer);
-        buffer = null;
         return newBuffer;
     }
 	
 	public static ByteBuffer ioResourceToByteBuffer(String resource, int bufferSize)
 	{
+		//if(resource.equals("src/sounds/sndDiplomacy"))
+			//System.out.println("!");
         ByteBuffer buffer = null;
-        
         try
         {
         	Path path = Paths.get(resource);
-            if (Files.isReadable(path)) 
+            if(Files.isReadable(path)) 
             {
-                try (SeekableByteChannel fc = Files.newByteChannel(path)) 
+                try(SeekableByteChannel fc = Files.newByteChannel(path)) 
                 {
-                    buffer = MemoryUtil.memAlloc((int)fc.size() + 1);
-                    while (fc.read(buffer) != -1) 
-                    {
-                        ;
-                    }
+                    buffer = BufferUtils.createByteBuffer((int)fc.size() + 1);
+                    while (fc.read(buffer) != -1);
                 }
             } 
             else 
             {
                 try 
+                (
+                    InputStream source = Utils.class.getResourceAsStream(resource);
+                    ReadableByteChannel rbc = Channels.newChannel(source)
+                )
                 {
-                    InputStream source = Utils.class.getClass().getResourceAsStream(resource);
-                    ReadableByteChannel rbc = Channels.newChannel(source);
-                    buffer = MemoryUtil.memAlloc(bufferSize);
-
-                    while (true) 
+                    buffer = BufferUtils.createByteBuffer(bufferSize);
+                    while(true) 
                     {
                         int bytes = rbc.read(buffer);
                         if (bytes == -1) 
-                        {
                             break;
-                        }
                         if (buffer.remaining() == 0) 
-                        {
                             buffer = resizeBuffer(buffer, buffer.capacity() * 2);
-                        }
                     }
                 }
                 catch(IOException err)
                 {
                 	System.err.println(err);
                 }
-            buffer.flip();
             }
         }catch(IOException err)
         {
         	System.err.println(err);
         }
-        
+        buffer.flip();
         return buffer;
     }
 	
@@ -88,7 +127,6 @@ public class Utils
 	{
 		ByteBuffer buffer = Utils.ioResourceToByteBuffer(fileName, bufferSize);
 		int image = NanoVG.nvgCreateImageMem(Main.vg, NanoVG.NVG_IMAGE_GENERATE_MIPMAPS, buffer);
-		MemoryUtil.memFree(buffer);
 		return image;
 	}
 	

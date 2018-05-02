@@ -54,19 +54,17 @@ public class Diplomacy
 		declareWar.update();
 		if(declareWar.getActivated() && nation.getDiplomacy(Main.level.player) == "Peace")
 		{
-			nation.setDiplomacy(Main.level.player, "War");
-			Main.level.getPlayerNation().setDiplomacy(nation, "War");
+			Main.level.player.setDiplomacy(nation, "War");
 		}
 		declarePeace.update();
 		if(declarePeace.getActivated() && nation.getDiplomacy(Main.level.player) == "War")
 		{
-			nation.setDiplomacy(Main.level.player, "Peace");
-			Main.level.getPlayerNation().setDiplomacy(nation, "Peace");
+			Main.level.player.setDiplomacy(nation, "Peace");
 		}
 		improveRelations.update();
 		if(improveRelations.getActivated())
 		{
-			nation.changeRelations(Main.level.player, 10);
+			Main.level.player.changeRelations(nation, 10);
 		}
 		sendGift.update();
 		if(sendGift.getActivated() && Main.level.player.getMoney() >= 1)
@@ -78,7 +76,6 @@ public class Diplomacy
 		alliance.update();
 		if(alliance.getActivated() && nation.getRelations(Main.level.player) >= 100)
 		{
-			nation.setDiplomacy(Main.level.player, "Alliance");
 			Main.level.player.setDiplomacy(nation, "Alliance");
 		}
 		name.setText(nation.getName());
@@ -93,13 +90,13 @@ public class Diplomacy
 		this.width = width;
 		this.height = height;
 		this.nation = nation;
-		declareWar = new guiButton(x, y + 60, "Declare war");
-		declarePeace = new guiButton(x, y + 80, "Declare peace");
-		improveRelations = new guiButton(x, y + 100, "Improve relations");
-		sendGift = new guiButton(x, y + 120, "Send gift");
-		alliance = new guiButton(x, y + 140, "Alliance");
+		declareWar = new guiButton(x, y + 75, "Declare war");
+		declarePeace = new guiButton(x, y + 100, "Declare peace");
+		improveRelations = new guiButton(x, y + 125, "Improve relations");
+		sendGift = new guiButton(x, y + 150, "Send gift");
+		alliance = new guiButton(x, y + 175, "Alliance");
 		relations = new Text(x, y, "");
-		status = new Text(x, y + 20, "");
-		name = new Text(x, y + 40, "");
+		status = new Text(x, y + 25, "");
+		name = new Text(x, y + 50, "");
 	}
 }

@@ -39,7 +39,6 @@ public class CameraBoxSelection implements Serializable
 		max.y = Float.POSITIVE_INFINITY;
 		max.z = 0.0001f;
 		Vector2f res = new Vector2f();
-		float dist = center.z;
 		Intersectionf.intersectRayAab(center, dir, min, max, res);
 		res.x = center.x + dir.x * res.x;
 		res.y = center.y + dir.y * res.y;

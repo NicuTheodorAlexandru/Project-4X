@@ -3,7 +3,7 @@ package game;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-
+import org.joml.Vector3f;
 import buildings.Factory;
 import buildings.Storage;
 import graphics.Model;
@@ -24,6 +24,7 @@ public class Tile implements Serializable
 	private List<Storage> storages;
 	private List<Army> armies;
 	private transient Sprite sprite;
+	private transient Sprite sprController;
 	private String resourceType;
 	private String terrainType;
 	private Nation owner;
@@ -40,10 +41,38 @@ public class Tile implements Serializable
 	private int siegeProgress;
 	private int lastSiegeProgress;
 	private int maxSiegeProgress;
+	private short lastColonized = 0;
+	
+	public boolean isNeighbour(Nation neighbour)
+	{
+		if(east != null && east.getOwner() == neighbour)
+			return true;
+		if(west != null && west.getOwner() == neighbour)
+			return true;
+		if(north != null && north.getOwner() == neighbour)
+			return true;
+		if(south != null && south.getOwner() == neighbour)
+			return true;
+		return false;
+	}
+	
+	public void setNeighbours(Tile north, Tile south, Tile east, Tile west)
+	{
+		this.east = east;
+		this.west = west;
+		this.north = north;
+		this.south = south;
+	}
+	
+	public Sprite getSprController()
+	{
+		return sprController;
+	}
 	
 	private void changeController(Nation nation)
 	{
 		this.controller = nation;
+		//sprController.getModel().getMesh().setColor(nation.getColor());
 	}
 	
 	public void addSiegeProgress(Army army)
@@ -233,16 +262,24 @@ public class Tile implements Serializable
 		factories.remove(factory);
 	}
 	
-	public void colonize(Nation nation)
+	public boolean colonize(Nation nation)
 	{
-		if(nation.getMoney() >= 1.0d)
+		if(nation.getMoney() >= 1.0d && this.owner == null)
 			nation.changeMoney(-1.0d);
 		else
-			return;
+			return false;
 		this.changeOwner(nation);
 		this.changeController(nation);
 		nation.addTiles(this);
 		changePopulation(new Population(nation.getCulture(), nation.getReligion(), "Unemployed", 2.0d));
+		if(this.getOwner() == Main.level.player)
+		{
+			Level.deselectTile();
+			lastColonized = 2;
+		}
+		if(this.getOwner().getCapital() == null)
+			this.getOwner().setCapital(this);
+		return true;
 	}
 	
 	public void changePopulationGrowth(float value)
@@ -317,7 +354,7 @@ public class Tile implements Serializable
 		for(int i = 0; i < pops.size(); i++)
 		{
 			Population pop = pops.get(i);
-			double temp = pop.getAmount() * populationGrowth / 10;//720;
+			double temp = pop.getAmount() * populationGrowth / 720;//720;
 			changePopulation(new Population(pop.getCulture(), pop.getReligion(), "Unemployed", temp));
 		}
 	}
@@ -386,6 +423,12 @@ public class Tile implements Serializable
 		sprite.getModel().setX(this.x);
 		sprite.getModel().setY(this.y);
 		sprite.getModel().setZ(0.0f);
+		/*sprController = new Sprite(new Texture("/images/sprController.png"));
+		sprController.getModel().setX(this.x);
+		sprController.getModel().setY(this.y);
+		sprController.getModel().setZ(-0.00001f);
+		if(controller != owner)
+			sprController.getModel().getMesh().setColor(new Vector4f(owner.getColor()));*/
 	}
 	
 	public Tile(float x, float y)
@@ -410,7 +453,7 @@ public class Tile implements Serializable
 				Defines.terrainTypes.length)];
 		resourceType = Defines.resourceTypes[Main.randomGenerator.nextInt(
 				Defines.resourceTypes.length)];
-		
+		north = west = south = east = null;
 		initGraphics();
 	}
 	
@@ -471,7 +514,7 @@ public class Tile implements Serializable
 		{
 			if(siegeProgress >= maxSiegeProgress)
 			{
-				this.changeController(sieger);
+				this.changeOwner(sieger);
 				siegeProgress = 0;
 			}
 			lastSiegeProgress = siegeProgress;
@@ -480,9 +523,24 @@ public class Tile implements Serializable
 			lastSiegeProgress = siegeProgress = 0;
 	}
 	
+	public Vector3f getMidPos()
+	{
+		Vector3f p = new Vector3f();
+		p.x = x + Defines.tileWidth / 2;
+		p.y = y + Defines.tileHeight / 2;
+		return p;
+	}
+	
 	public void update()
 	{
+		if(lastColonized != 0 && getOwner() == Main.level.player)
+		{
+			if(getOwner() == Main.level.player && lastColonized == 1)
+				Level.selectTile(this);
+			lastColonized--;
+				
+		}
 		if(sprite.getModel().getSelected() && Level.selectedTile != this)
-			Level.selectedTile = this;
+			Level.selectTile(this);
 	}
 }

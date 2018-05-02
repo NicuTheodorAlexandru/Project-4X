@@ -1,10 +1,10 @@
 package hud;
 
 import org.joml.Vector3f;
-
 import game.Army;
 import game.Level;
 import game.Nation;
+import game.Population;
 import game.SaveGame;
 import game.Unit;
 import graphics.Sprite;
@@ -12,19 +12,21 @@ import graphics.Text;
 import graphics.Texture;
 import gui.guiBuildMenu;
 import gui.guiButton;
+import gui.guiPieChart;
 import gui.guiResourceList;
 import gui.guiSprite;
 import gui.guiTooltip;
 import input.Keyboard;
+import input.Mouse;
 import main.Main;
 import misc.Assets;
 import misc.Settings;
 
 public class HUD
 {
-	public static boolean menuOpen = false;
-	public static boolean interfaceOpen = false;
-	public static boolean buttonClicked = false;
+	public boolean menuOpen = false;
+	public boolean interfaceOpen = false;
+	public boolean buttonClicked = false;
 	private boolean pauseState;
 	private guiResourceList resourceList;
 	private guiBuildMenu buildMenu;
@@ -32,16 +34,20 @@ public class HUD
 	private guiButton exitGameButton;
 	private guiButton resumeGameButton;
 	private guiButton saveGameButton;
+	private guiButton mainMenuButton;
 	private guiButton buildFactoryButton;
 	private guiButton openDiplomacy;
 	private guiButton recruitArmy;
+	private guiPieChart piechart;
 	private guiTooltip profit;
 	private Diplomacy diplomacy;
 	private Text provincePopulation;
 	private Text provinceResource;
 	private Text money;
 	private Text population;
+	private Text siegeProgress;
 	private Text manpower;
+	private guiSprite speed;
 	private float exMoney;
 	private float exexMoney;
 	
@@ -65,7 +71,7 @@ public class HUD
 			{
 				interfaceOpen = true;
 				String res = Level.selectedTile.getResourceType();
-				provinceResource = new Text(0.0f, Main.window.getWindowHeight() - 45.0f, res);
+				provinceResource = new Text(0.0f, Main.window.getWindowHeight() - 50.0f, res);
 				if(Level.selectedTile.getOwner() == null)
 				{
 					if(colonizeButton == null)
@@ -79,14 +85,23 @@ public class HUD
 					int pop = (int)Level.selectedTile.getPopulation();
 					String p = "" + pop;
 					provincePopulation = new Text(0.0f, Main.window.getWindowHeight() - 20.0f, p);
-					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 80.0f, 
+					piechart = new guiPieChart();
+					piechart.setX(250.0f);
+					piechart.setY(730.0f);
+					piechart.setRadius(30.0f);
+					String s = "Siege progress: " + Level.selectedTile.getSiegeProgress() + "%";
+					siegeProgress = new Text(0.0f, Main.window.getWindowHeight() - 80.0f, s);
+					buildFactoryButton = new guiButton(0.0f, Main.window.getWindowHeight() - 110.0f, 
 							new guiSprite(Assets.imgBuild));
 					if(Level.selectedTile.getOwner() != Main.level.player)
-						openDiplomacy = new guiButton(0.0f, Main.window.getWindowHeight() - 120.0f, 
+					{
+						openDiplomacy = new guiButton(0.0f, Main.window.getWindowHeight() - 150.0f, 
 								new guiSprite(Assets.imgDiplomacy));
+						openDiplomacy.setClickSound("Diplomacy");
+					}
 					else
 					{
-						recruitArmy = new guiButton(0.0f, Main.window.getWindowHeight() - 160.0f, 
+						recruitArmy = new guiButton(0.0f, Main.window.getWindowHeight() - 170.0f, 
 								new guiSprite(Assets.imgRecruit));
 					}
 				}
@@ -116,6 +131,7 @@ public class HUD
 	
 	public void update()
 	{
+		provinceInfo();
 		buttonClicked = false;
 		resourceList.update();
 		if(buildMenu != null)
@@ -161,6 +177,7 @@ public class HUD
 				exitGameButton = null;
 				resumeGameButton = null;
 				saveGameButton = null;
+				mainMenuButton = null;
 				menuOpen = false;
 				if(!pauseState)
 					Level.date.unpause();
@@ -186,15 +203,19 @@ public class HUD
 					Level.date.unpause();
 					menuOpen = false;
 				}
+				mainMenuButton.update();
+				if(mainMenuButton.getActivated())
+					Main.returnToMainMenu = true;
 			}
 		}
 		else
 		{
 			if(Keyboard.getKeyReleased(Settings.keyExit) && !interfaceOpen)
 			{
-				exitGameButton = new guiButton(500.f, 300.f, "Exit game");
+				exitGameButton = new guiButton(500.f, 330.f, "Exit game");
 				resumeGameButton = new guiButton(500.f, 270.f, "Resume game");
 				saveGameButton = new guiButton(500.f, 240.f, "Save game");
+				mainMenuButton = new guiButton(500.f, 300.f, "Main menu");
 				pauseState = Level.date.getPause();
 				Level.date.pause();
 				menuOpen = true;
@@ -230,6 +251,19 @@ public class HUD
 			String m = "Manpower: " + Integer.toString(Main.level.player.getManpower());
 			manpower.setText(m);
 		}
+		if(speed == null)
+		{
+			speed = new guiSprite(Assets.imgSpeed[0]);
+			speed.setX(1085.0f);
+			speed.setY(2.0f);
+		}
+		else
+		{
+			int id = 6 - Level.speed;
+			if(Level.date.getPause())
+				id = 0;
+			speed.setImage(Assets.imgSpeed[id]);
+		}
 		if(profit == null)
 		{
 			exMoney = (float)Main.level.getPlayerNation().getMoney();
@@ -246,7 +280,9 @@ public class HUD
 		}
 		if(provinceResource != null)
 		{
-			if(Level.selectedTile == null || Level.selectedTile.getOwner() == null)
+			if(Mouse.isLeftButtonReleased())
+				interfaceOpen = false;
+			if(Level.selectedTile == null)
 			{
 				provinceResource = null;
 				interfaceOpen = false;
@@ -254,6 +290,18 @@ public class HUD
 			else
 			{
 				provinceResource.setText(Level.selectedTile.getResourceType());
+			}
+		}
+		if(siegeProgress != null)
+		{
+			if(Level.selectedTile == null || Level.selectedTile.getOwner() == null)
+			{
+				siegeProgress = null;
+			}
+			else
+			{
+				String s = "Siege progress: " + Level.selectedTile.getSiegeProgress() + "%";
+				siegeProgress.setText(s);
 			}
 		}
 		if(provincePopulation != null)
@@ -270,21 +318,17 @@ public class HUD
 				provincePopulation.setText(p);
 			}
 		}
-		if(colonizeButton != null)
+		if(piechart != null)
 		{
-			if(Level.selectedTile == null || Level.selectedTile.getOwner() != null ||
-					Keyboard.getKey(Settings.keyExit))
+			if(Level.selectedTile == null || Level.selectedTile.getOwner() == null)
 			{
-				colonizeButton = null;
-				interfaceOpen = false;
+				piechart = null;
 			}
 			else
 			{
-				colonizeButton.update();
-				if(colonizeButton.getActivated())
+				for(Population pop: Level.selectedTile.getPops())
 				{
-					Level.selectedTile.colonize(Main.level.player);
-					colonizeButton = null;
+					piechart.addValue(pop.getJob(), (int)pop.getAmount());
 				}
 			}
 		}
@@ -307,7 +351,8 @@ public class HUD
 		}
 		if(openDiplomacy != null)
 		{
-			if(Level.selectedTile == null || Level.selectedTile.getOwner() == Main.level.player)
+			if(Level.selectedTile == null || Level.selectedTile.getOwner() == Main.level.player ||
+					Level.selectedTile.getOwner() == null)
 			{
 				openDiplomacy = null;
 			}
@@ -345,7 +390,24 @@ public class HUD
 				diplomacy.update();
 			}
 		}
-		provinceInfo();
+		if(colonizeButton != null)
+		{
+			if(Level.selectedTile == null || Level.selectedTile.getOwner() != null ||
+					Keyboard.getKey(Settings.keyExit))
+			{
+				colonizeButton = null;
+				interfaceOpen = false;
+			}
+			else
+			{
+				colonizeButton.update();
+				if(colonizeButton.getActivated())
+				{
+					if(Level.selectedTile.colonize(Main.level.player))
+						colonizeButton = null;
+				}
+			}
+		}
 	}
 	
 	public void render()
@@ -363,6 +425,8 @@ public class HUD
 			resumeGameButton.render();
 		if(exitGameButton != null)
 			exitGameButton.render();
+		if(mainMenuButton != null)
+			mainMenuButton.render();
 		if(population != null)
 			population.render();
 		if(money != null)
@@ -381,6 +445,14 @@ public class HUD
 			profit.render();
 		if(diplomacy != null)
 			diplomacy.render();
+		if(siegeProgress != null)
+			if(Level.selectedTile != null)
+				if(Level.selectedTile.getSiegeProgress() > 0)
+					siegeProgress.render();
+		if(speed != null)
+			speed.render();
+		if(piechart != null)
+			piechart.render();
 	}
 	
 	public HUD()

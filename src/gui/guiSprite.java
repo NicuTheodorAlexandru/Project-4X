@@ -77,12 +77,9 @@ public class guiSprite
 		this(0, 0, image);
 	}
 	
-	public guiSprite(float x, float y, int image)
+	public void setImage(int image)
 	{
 		imageHandle = image;
-		this.x = x;
-		this.y = y;
-		alpha = 1.0f;
 		IntBuffer w = MemoryUtil.memAllocInt(1);
 		IntBuffer h = MemoryUtil.memAllocInt(1);
 		NanoVG.nvgImageSize(Main.vg, imageHandle, w, h);
@@ -90,5 +87,13 @@ public class guiSprite
 		height = h.get(0);
 		MemoryUtil.memFree(w);
 		MemoryUtil.memFree(h);
+	}
+	
+	public guiSprite(float x, float y, int image)
+	{
+		this.x = x;
+		this.y = y;
+		alpha = 1.0f;
+		setImage(image);
 	}
 }

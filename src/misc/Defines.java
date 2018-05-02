@@ -23,7 +23,7 @@ public class Defines
 					"Plain", "Desert", "Water"	
 				};
 		
-		tileWidth = tileHeight = 0.5f;
+		tileWidth = tileHeight = 2.0f;
 		widthResolution = 1280;
 		heightResolution = 720;
 		title = "4X Project";

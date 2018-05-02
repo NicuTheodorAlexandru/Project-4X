@@ -17,43 +17,48 @@ public class Army
 	private Tile location;
 	private float speed;
 	private boolean selected;
-	private int siegeProgress;
+	private boolean inBattle;
 
+	public void setBattle(boolean value)
+	{
+		inBattle = value;
+	}
+	
+	public boolean getBattle()
+	{
+		return inBattle;
+	}
+	
 	private void siege()
 	{
+		if(location.getOwner() == null || location.getOwner() == owner)
+			return;
 		if(location.getOwner().getDiplomacy(owner) == "War" && location.getController() == location.getOwner())
 		{
-			siegeProgress++;
-			if(siegeProgress >= 100)
-			{
-				siegeProgress = 0;
-				location.setController(owner);
-			}
+			location.addSiegeProgress(this);
 		}
 	}
 	
 	public void reinforce(List<Tile> tiles)
 	{
-		for(int j = 0; j < tiles.size() && getManpower() < getMaxManpower() ; j++)
+		for(Tile t: tiles)
 		{
-			if(tiles.get(j).getOwner() != owner)
-				continue;
-			Population pop;
-			for(int i = 0; i < tiles.get(j).getPops().size() && getManpower() < getMaxManpower(); i++)
+			for(int i = 0; i < t.getPops().size(); i++)
 			{
-				pop = tiles.get(j).getPops().get(i);
+				Population pop = t.getPops().get(i);
 				if(pop.getJob() != "Soldier")
 					continue;
 				int amount = (int)pop.getAmount();
-				pop.change(-amount);
-				for(int k = 0; k < units.size() && amount > 0; k++)
-					if(units.get(k).getManpower() < units.get(k).getMaxManpower())
-					{
-						int a = units.get(k).reinforce(amount);
-						amount -= a;
-						
-					}
-				pop.change(amount);
+				if(amount > 0)
+				{
+					if(amount > getMaxManpower() - getManpower())
+						amount = getMaxManpower() - getManpower();
+					t.changePopulation(new Population(pop.getCulture(), pop.getReligion(), pop.getJob(), -amount));
+					amount  -= getUnits().get(0).reinforce(amount);
+					t.changePopulation(new Population(pop.getCulture(), pop.getReligion(), pop.getJob(), amount));
+				}
+				if(getManpower() == getMaxManpower())
+					break;
 			}
 		}
 	}
@@ -81,6 +86,11 @@ public class Army
 	public Sprite getSprite()
 	{
 		return units.get(0).getSprite();
+	}
+	
+	public Vector3f getTargetPos()
+	{
+		return targetPos;
 	}
 	
 	public void moveTo(Vector3f target)
@@ -117,8 +127,14 @@ public class Army
 		}
 	}
 	
+	public Vector3f getPos()
+	{
+		return pos;
+	}
+	
 	public Army(Unit unit)
 	{
+		inBattle = false;
 		units = new ArrayList<>();
 		units.add(unit);
 		pos = unit.getSprite().getModel().getPosition();
@@ -159,16 +175,38 @@ public class Army
 	
 	public void updateOnDay()
 	{
-		for(Unit unit: units)
+		for(int i = 0; i < units.size(); i++)
 		{
-			reinforce(Main.level.getWorld().listTiles);
+			Unit unit = units.get(i);
+			if(!inBattle)
+				reinforce(Main.level.getWorld().listTiles);
 			unit.maintenance();
+			if(unit.getManpower() == 0)
+			{
+				units.remove(unit);
+				i--; 
+			}
 		}
-		siege();
+		if(!inBattle)
+			siege();
 	}
 	
 	public void updateOnHour()
 	{
+		if(!inBattle)
+		{
+			for(Army army: location.getArmies())
+			{
+				if(owner.getDiplomacy(army.getOwner()).equals("War"))
+				{
+					Main.level.getWorld().newBattle(new Battle(this, army));
+				}
+			}
+		}
+		else
+		{
+			
+		}
 		Sprite sprite = units.get(0).getSprite();
 		if(selected)
 		{
@@ -178,37 +216,40 @@ public class Army
 				Main.level.selectedArmy = null;
 			}
 		}
-		if(sprite.getModel().getPosition().x != targetPos.x)
+		if(!inBattle)
 		{
-			float a = targetPos.x - sprite.getModel().getX();
-			if(a > speed)
-				a = speed;
-			else if(a < -speed)
-				a = -speed;
-			sprite.getModel().moveX(a);
+			if(sprite.getModel().getPosition().x != targetPos.x)
+			{
+				float a = targetPos.x - sprite.getModel().getX();
+				if(a > speed)
+					a = speed;
+				else if(a < -speed)
+					a = -speed;
+				sprite.getModel().moveX(a);
+			}
+			if(sprite.getModel().getPosition().y != targetPos.y)
+			{
+				float a = targetPos.y - sprite.getModel().getY();
+				if(a > speed)
+					a = speed;
+				else if(a < -speed)
+					a = -speed;
+				sprite.getModel().moveY(a);
+			}
+			location.leaveArmy(this);
+			int i = (int)(sprite.getModel().getX() / Defines.tileWidth);
+			int j = (int)(sprite.getModel().getY() / Defines.tileHeight);
+			if(i < 0)
+				i = 0;
+			else if(i >= Main.level.getWorld().getWidth())
+				i = Main.level.getWorld().getWidth() - 1;
+			if(j < 0)
+				j = 0;
+			else if(j >= Main.level.getWorld().getHeight())
+				j = Main.level.getWorld().getHeight() - 1;
+			location = Main.level.getWorld().getTile(i, j);
+			location.enterArmy(this);
 		}
-		if(sprite.getModel().getPosition().y != targetPos.y)
-		{
-			float a = targetPos.y - sprite.getModel().getY();
-			if(a > speed)
-				a = speed;
-			else if(a < -speed)
-				a = -speed;
-			sprite.getModel().moveY(a);
-		}
-		location.leaveArmy(this);
-		int i = (int)(sprite.getModel().getX() / Defines.tileWidth);
-		int j = (int)(sprite.getModel().getY() / Defines.tileHeight);
-		if(i < 0)
-			i = 0;
-		else if(i >= Main.level.getWorld().getWidth())
-			i = Main.level.getWorld().getWidth() - 1;
-		if(j < 0)
-			j = 0;
-		else if(j >= Main.level.getWorld().getHeight())
-			j = Main.level.getWorld().getHeight() - 1;
-		location = Main.level.getWorld().getTile(i, j);
-		location.enterArmy(this);
 	}
 	
 	public void render()

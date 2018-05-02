@@ -46,9 +46,16 @@ public class Unit implements Serializable
 		}
 	}
 	
+	public void counterattack(Unit unit)
+	{
+		float damage = this.damage * manpower / maxManpower;
+		unit.defense(damage);
+	}
+	
 	public void attack(Unit unit)
 	{
-		float damage = this.damage * manpower;
+		float damage = this.damage * manpower / maxManpower;
+		unit.counterattack(this);
 		unit.defense(damage);
 	}
 	
@@ -89,7 +96,6 @@ public class Unit implements Serializable
 	
 	public int reinforce(int amount)
 	{
-		int a = amount;
 		if(manpower < maxManpower)
 		{
 			if(amount > reinforceRate)
@@ -102,7 +108,7 @@ public class Unit implements Serializable
 			owner.changeMoney(money);
 			manpower += amount;
 		}
-		return (a - amount);
+		return amount;
 	}
 	
 	public void render()
@@ -123,6 +129,7 @@ public class Unit implements Serializable
 		this.maxMorale = maxMorale;
 		this.speed = speed;
 		moraleRegen = maxMorale / maxManpower;
+		reinforceRate = 1;
 		this.sprite.getModel().setZ(-0.1f);
 	}
 }

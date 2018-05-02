@@ -15,8 +15,14 @@ public class World implements Serializable
 	private static final long serialVersionUID = -3379923225982945931L;
 	public Tile[][] tiles;
 	public List<Tile> listTiles;
+	public List<Battle> battles;
 	private int widthTiles, heightTiles;
 	public static Market market;
+	
+	public void newBattle(Battle b)
+	{
+		battles.add(b);
+	}
 	
 	public Tile getTile(int x, int y)
 	{
@@ -110,6 +116,15 @@ public class World implements Serializable
 			{
 				Main.level.nations.get(i).getArmies().get(j).updateOnHour();
 			}
+		for(int i = 0; i < battles.size(); i++)
+		{
+			battles.get(i).updateOnHour();
+			if(battles.get(i).getEnded())
+			{
+				battles.remove(i);
+				i--;
+			}
+		}
 	}
 	
 	public void update()
@@ -123,9 +138,7 @@ public class World implements Serializable
 		}
 		for(int i = 0; i < Main.level.nations.size(); i++)
 			for(int j = 0; j < Main.level.nations.get(i).getArmies().size(); j++)
-			{
 				Main.level.nations.get(i).getArmies().get(j).update();
-			}
 		market.update();
 	}
 	
@@ -146,6 +159,7 @@ public class World implements Serializable
 	
 	public World(int widthTiles, int heightTiles)
 	{
+		battles = new ArrayList<>();
 		this.widthTiles = widthTiles;
 		this.heightTiles = heightTiles;
 		listTiles = new ArrayList<>();

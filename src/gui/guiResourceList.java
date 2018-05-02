@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import game.World;
 import graphics.Text;
-import hud.HUD;
 import input.Keyboard;
 import main.Main;
 import misc.Defines;
@@ -58,15 +57,17 @@ public class guiResourceList extends guiList
 	
 	private void activate()
 	{
-		if(Keyboard.getKeyReleased(Settings.keyOpenResourceList) && HUD.interfaceOpen == false && HUD.menuOpen == false)
+		if(Keyboard.getKeyReleased(Settings.keyOpenResourceList) && Main.hud.interfaceOpen == false 
+				&& Main.hud.menuOpen == false)
 		{
 			open = true;
-			HUD.interfaceOpen = true;
+			Main.hud.interfaceOpen = true;
 		}
-		else if((Keyboard.getKeyReleased(Settings.keyOpenResourceList) || Keyboard.getKeyReleased(Settings.keyExit)) && open)
+		else if((Keyboard.getKeyReleased(Settings.keyOpenResourceList) 
+				|| Keyboard.getKeyReleased(Settings.keyExit)) && open)
 		{
 			open = false;
-			HUD.interfaceOpen = false;
+			Main.hud.interfaceOpen = false;
 		}
 	}
 	

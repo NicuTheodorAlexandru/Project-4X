@@ -34,9 +34,8 @@ public class MainMenu
 		
 		if(startNewGame.getActivated())
 		{
-			Level level = new Level(new Nation("Prussia", "Prussian", "Protestant", 
+			Main.level = new Level(new Nation("Prussia", "Prussian", "Protestant", 
 					new Vector3f(0.0f, 0.192f, 0.325f)), 10, 10);
-			Main.level = level;
 			Main.hud = new HUD();
 		}
 		else if(exitGame.getActivated())

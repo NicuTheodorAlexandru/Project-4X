@@ -1,5 +1,6 @@
 package game;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Battle 
@@ -8,19 +9,22 @@ public class Battle
 	private Nation side2;
 	private List<Army> armies1;
 	private List<Army> armies2;
-	private int width, height;
-	private Army[][] terrain;
 	private boolean ended;
 	
-	public void addArmy(Army army)
+	public void update()
 	{
-		if(army.getOwner() == side1)
-			armies1.add(army);
-		else if(army.getOwner() == side2)
-			armies2.add(army);
+		
 	}
 	
-	public void update()
+	public void updateOnHour()
+	{
+		for(int i = 0; i < armies1.size(); i++)
+		{
+			
+		}
+	}
+	
+	public void updateOnDay()
 	{
 		
 	}
@@ -30,14 +34,32 @@ public class Battle
 		return ended;
 	}
 	
-	public Battle(int width, int height, List<Army> armies1, List<Army> armies2)
+	public void addArmy(Army army)
 	{
-		this.width = width;
-		this.height = height;
-		this.armies1 = armies1;
-		this.armies2 = armies2;
-		side1 = armies1.get(0).getOwner();
-		side2 = armies2.get(0).getOwner();
+		if(army.getOwner().getDiplomacy(side1).equals("War"))
+		{
+			if(!army.getBattle())
+			{
+				army.setBattle(true);
+				armies2.add(army);
+			}
+		}
+		else if(army.getOwner().getDiplomacy(side2).equals("War"))
+		{
+			if(!army.getBattle())
+			{
+				army.setBattle(true);
+				armies1.add(army);
+			}
+		}
+	}
+	
+	public Battle(Army army1, Army army2)
+	{
+		armies1 = new ArrayList<>();
+		armies2 = new ArrayList<>();
+		side1 = army1.getOwner();
+		side2 = army2.getOwner();
 		ended = false;
 	}
 }

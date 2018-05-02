@@ -2,9 +2,7 @@ package gui;
 
 import org.lwjgl.nanovg.NVGColor;
 import org.lwjgl.nanovg.NanoVG;
-
 import graphics.Text;
-import hud.HUD;
 import input.Mouse;
 import main.Main;
 
@@ -15,6 +13,7 @@ public class guiButton
 	private float width;
 	private float height;
 	private float maxHeight, curHeight;
+	private String clickSound;
 	private guiSprite sprite;
 	private guiList list;
 	private Text text;
@@ -78,7 +77,7 @@ public class guiButton
 				{
 					activated = true;
 					pressed = false;
-					HUD.buttonClicked = true;
+					//Main.hud.buttonClicked = true;
 				}
 			}
 		}
@@ -91,6 +90,10 @@ public class guiButton
 				if(this.y <= y && this.y + height >= y)
 				{
 					pressed = true;
+					if(clickSound != null)
+					{
+						Main.soundManager.playSoundSource(clickSound);
+					}
 				}
 			}
 		}
@@ -146,6 +149,11 @@ public class guiButton
 		}
 	}
 	
+	public void setClickSound(String name)
+	{
+		clickSound = name;
+	}
+	
 	public guiButton(float x, float y, float width, guiList list)
 	{
 		pressed = activated = false;
@@ -156,6 +164,7 @@ public class guiButton
 		this.curHeight = list.getHeight();
 		this.maxHeight = list.getCurrentHeight();
 		this.list = list;
+		clickSound = null;
 	}
 	
 	public guiButton(float x, float y, guiSprite sprite)
@@ -168,6 +177,7 @@ public class guiButton
 		height = sprite.getHeight();
 		sprite.setX(x);
 		sprite.setY(y);
+		clickSound = null;
 	}
 	
 	public guiButton(float x, float y, String text)
@@ -178,5 +188,6 @@ public class guiButton
 		this.text = new Text(x, y, text);
 		width = this.text.getWidth();
 		height = this.text.getHeight();
+		clickSound = null;
 	}
 }

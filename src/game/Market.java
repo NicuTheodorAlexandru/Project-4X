@@ -14,13 +14,21 @@ public class Market implements Serializable
 	private static final long serialVersionUID = 759093621811953565L;
 	private HashMap<String, Double> prices;
 	private final double priceChangePerUnit;
+	private final double minPrice;
+	
+	public double getPrice(String resource)
+	{
+		if(prices.containsKey(resource))
+			return prices.get(resource);
+		return 0;
+	}
 	
 	public void sellResource(Factory factory, String resource, double amount)
 	{
 		double money = amount * prices.get(resource);
 		double price = prices.get(resource) - priceChangePerUnit * amount;
-		if(price < 0.1d)
-			price = 0.1d;
+		if(price < minPrice)
+			price = minPrice;
 		prices.put(resource, price);
 		factory.changeStockpile(resource, -amount);
 		factory.changeMoney(money);
@@ -90,6 +98,7 @@ public class Market implements Serializable
 	public Market()
 	{
 		priceChangePerUnit = 0.01d;
+		minPrice = 0.5d;
 		prices = new HashMap<>();
 		
 		for(String resource: Defines.resourceTypes)

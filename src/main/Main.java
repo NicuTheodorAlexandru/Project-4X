@@ -5,8 +5,12 @@ import misc.Timer;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.nanovg.NanoVG;
 import org.lwjgl.nanovg.NanoVGGL2;
+import org.lwjgl.openal.AL11;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
+
+import audio.SoundListener;
+import audio.SoundManager;
 import game.Level;
 import graphics.Camera;
 import graphics.Renderer;
@@ -27,11 +31,13 @@ public class Main
 	public static Level level;
 	private Timer timer;
 	private Renderer renderer;
+	public static SoundManager soundManager;
 	private Keyboard keyboard;
 	private Mouse mouse;
 	public static HUD hud;
-	private MainMenu mainMenu;
+	public static MainMenu mainMenu;
 	private boolean debug = true;
+	public static boolean returnToMainMenu = false;
 	private double lastFps = 0;
 	public static long frame;
 	
@@ -67,11 +73,11 @@ public class Main
 			System.out.println("Could not init GLFW!");
 		Defines.init();
 		window = new Window(Defines.widthResolution, Defines.heightResolution, Defines.title);
+		soundManager = new SoundManager();
 		GL.createCapabilities();
 		//GL11.glViewport(0, 0, window.getWindowWidth(), window.getWindowHeight());
 		vg = NanoVGGL2.nvgCreate(0);
 		Assets.initNano();
-		
 		Assets.init();
 		randomGenerator = new Random();
 		renderer = new Renderer();
@@ -81,6 +87,11 @@ public class Main
 		keyboard = new Keyboard(window.getWindowID());
 		mouse = new Mouse(window);
 		mainMenu = new MainMenu();
+		soundManager = new SoundManager();
+		soundManager.init();
+		soundManager.setAttenuationModel(AL11.AL_EXPONENT_DISTANCE);
+		soundManager.setListener(new SoundListener());
+		Assets.initSounds();
 		frame = 0;
 		
 		GL11.glClearColor(1.0f, 0.5f, 0.2f, 0.0f);
@@ -106,6 +117,14 @@ public class Main
 		}
 		else if(mainMenu != null)
 			mainMenu.update();
+		if(returnToMainMenu)
+		{
+			returnToMainMenu = false;
+			hud = null;
+			level = null;
+			mainMenu = new MainMenu();
+		}
+		soundManager.updateListener(camera);
 	}
 	
 	private void openGLFlags()

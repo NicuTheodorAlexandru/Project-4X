@@ -26,5 +26,5 @@ public class Settings
 	//video settings
 	//controls settings
 	public static float mouseSensitivity = 0.2f;
-	public static float cameraSpeed = 0.01f;
+	public static float cameraSpeed = 0.1f;
 }
